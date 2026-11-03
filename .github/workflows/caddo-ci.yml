@@ -1,0 +1,73 @@
+name: "caddo CI"
+# The deploy branch of keepprogress/roBrowserLegacy: what the caddokawaRo
+# server runs. Upstream workflows are left as they are and disabled on this fork.
+
+concurrency:
+    group: ${{ github.workflow }}-${{ github.ref }}
+    cancel-in-progress: true
+
+on:
+    push:
+        # sync/*: caddo rebased onto a newer upstream, checked before it replaces caddo
+        branches: ["caddo", "sync/**"]
+    pull_request:
+        branches: ["caddo"]
+    workflow_dispatch:
+
+permissions:
+    contents: read
+
+jobs:
+    check:
+        name: "lint, format, build, test"
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout repo
+              uses: actions/checkout@v5
+              with:
+                  # The test step looks up the ui_zh.py commit in the history
+                  fetch-depth: 0
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v6
+              with:
+                  node-version: 24
+
+            # No lock file in the repo; upstream installs the same way
+            - name: Install dependencies
+              run: npm install
+
+            # On the tree that is deployed, Chinese UI included
+            - name: Lint
+              run: npm run lint
+
+            - name: Format
+              run: npm run format:check
+
+            - name: Build
+              run: |
+                  npm run build
+                  test -d dist/Web
+
+            # The upstream tests check the English UI text. Run them with the
+            # ui_zh.py translations taken back out; lint and build above
+            # already ran on the translated code.
+            - name: Take the ui_zh.py translations out
+              run: |
+                  commit=$(git log --grep='^feat(caddo): apply ui_zh' --format=%H -1)
+                  if [ -z "$commit" ]; then
+                      echo "::error::no 'feat(caddo): apply ui_zh' commit on this branch"
+                      exit 1
+                  fi
+                  git -c user.name=ci -c user.email=ci@localhost revert --no-commit "$commit"
+
+            # Excluded, from robrowser-caddo.patch rather than ui_zh.py:
+            # - Navigation.airship: Navigation shows map names through DB.getMapName,
+            #   which the test's DB mock does not have.
+            # - WriteRodex.characterInfo: job names come from the Chinese JobNameTable.
+            - name: Test
+              run: >-
+                  npx vitest run
+                  --exclude tests/ui/Navigation.airship.test.js
+                  --exclude tests/ui/WriteRodex.characterInfo.test.js
