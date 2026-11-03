@@ -204,7 +204,7 @@ class Renderer {
 			this.errorOverlay.style.cssText =
 				'position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.85); color:white; display:flex; flex-direction:column; justify-content:center; align-items:center; z-index:10000; text-align:center;';
 			this.errorOverlay.innerHTML =
-				'<h2 style="color:#ff6b6b; margin-bottom:10px;">Graphics Context Lost</h2><p>The browser lost connection to the GPU.</p><p style="font-size:0.9em; opacity:0.8;">Attempting to restore automatically...</p>';
+				'<h2 style="color:#ff6b6b; margin-bottom:10px;">畫面繪製中斷</h2><p>瀏覽器與顯示卡的連線中斷了。</p><p style="font-size:0.9em; opacity:0.8;">正在嘗試自動恢復...</p>';
 			document.body.appendChild(this.errorOverlay);
 		} else {
 			this.errorOverlay.style.display = 'flex';

@@ -531,18 +531,18 @@ class EntityControl {
 				if (Session.homunId === this.GID) {
 					ContextMenu.remove();
 					ContextMenu.append();
-					ContextMenu.addElement('View Status', () => {
+					ContextMenu.addElement('顯示狀態', () => {
 						HomunInformations.ui.toggle();
 					});
-					ContextMenu.addElement('Feed', () => {
+					ContextMenu.addElement('餵食飼料', () => {
 						HomunInformations.reqHomunFeed();
 					});
 					if (localStorage.getItem('HOM_AGGRESSIVE') == 0) {
-						ContextMenu.addElement('Assist', () => {
+						ContextMenu.addElement('協助', () => {
 							HomunInformations.toggleAggressive();
 						});
 					} else {
-						ContextMenu.addElement('Stand By', () => {
+						ContextMenu.addElement('等候', () => {
 							HomunInformations.toggleAggressive();
 						});
 					}
@@ -553,15 +553,15 @@ class EntityControl {
 				if (Session.mercId === this.GID) {
 					ContextMenu.remove();
 					ContextMenu.append();
-					ContextMenu.addElement('View Status', () => {
+					ContextMenu.addElement('顯示狀態', () => {
 						MercenaryInformations.ui.toggle();
 					});
 					if (localStorage.getItem('MER_AGGRESSIVE') == 0) {
-						ContextMenu.addElement('Assist', () => {
+						ContextMenu.addElement('協助', () => {
 							MercenaryInformations.toggleAggressive();
 						});
 					} else {
-						ContextMenu.addElement('Stand By', () => {
+						ContextMenu.addElement('等候', () => {
 							MercenaryInformations.toggleAggressive();
 						});
 					}

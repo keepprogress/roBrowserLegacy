@@ -118,7 +118,7 @@ class GroupEngine {
 		}
 
 		ChatBox.addText(
-			pseudo + ' ' + DB.getMessage(2059, ' has recieved an invitation to join your party.'),
+			pseudo + ' ' + DB.getMessage(2059, ' 已收到加入您隊伍的邀請。'),
 			ChatBox.TYPE.BLUE,
 			ChatBox.FILTER.PARTY_SETUP
 		);

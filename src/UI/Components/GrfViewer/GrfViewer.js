@@ -236,11 +236,11 @@ function showContextMenu(iconElement, event) {
 	infoBtn.onmousedown = null;
 
 	// Header
-	header.innerHTML = `Path: ${path}`;
+	header.innerHTML = `路徑：${path}`;
 	header.style.backgroundColor = '';
 	header.onclick = () => {
 		navigator.clipboard.writeText(path);
-		header.innerHTML = `Copied: ${path}`;
+		header.innerHTML = `已複製：${path}`;
 		header.style.backgroundColor = '#AAFFAA';
 	};
 
@@ -419,7 +419,7 @@ function renderFiles(list) {
 
 	if (!list.length) {
 		const msg = root.querySelector('#msg');
-		msg.textContent = 'No file found.';
+		msg.textContent = '找不到檔案。';
 		msg.style.display = 'block';
 		return;
 	}

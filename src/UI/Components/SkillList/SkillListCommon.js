@@ -654,7 +654,7 @@ export function createSkillList({
 									'<span class="level">Lv : <span class="current">0</span></span>' +
 									'</div></td>' +
 									'<td class="selectable type">' +
-									'<div class="consume">Passive</div></td>';
+									'<div class="consume">被動</div></td>';
 
 								miniBox.appendChild(miniTr);
 
@@ -823,7 +823,7 @@ export function createSkillList({
 				: `Lv : <span class="current">${skill.level}</span>`) +
 			'</span></div></td>' +
 			'<td class="selectable type">' +
-			`<div class="consume">${skill.type ? `Sp : <span class="spcost">${skill.spcost}</span>` : 'Passive'}</div>` +
+			`<div class="consume">${skill.type ? `Sp : <span class="spcost">${skill.spcost}</span>` : '被動'}</div>` +
 			'</td>';
 
 		if (!skill.upgradable || !_points) {

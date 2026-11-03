@@ -57,7 +57,7 @@ function loadFiles(callback) {
 	q.add(() => {
 		Client.onFilesLoaded = count => {
 			if (!Configs.get('remoteClient') && !count && !window.electronAPI?.isElectron) {
-				alert('No client to initialize roBrowser');
+				alert('沒有可用於初始化 roBrowser 的客戶端');
 				Intro.remove();
 				Intro.append();
 				return;
@@ -189,7 +189,7 @@ function onReload() {
 
 	// WTF no servers ?
 	if (count === 0) {
-		UIManager.showMessageBox('Sorry, no server found.', 'ok', GameEngine.init);
+		UIManager.showMessageBox('很抱歉，找不到伺服器。', 'ok', GameEngine.init);
 	}
 
 	// Just 1 server, skip the WinList

@@ -164,7 +164,7 @@ CaptchaAnswer.onRemove = function onRemove() {
 	}
 	const retryCount = root.querySelector('.retry_count');
 	if (retryCount) {
-		retryCount.textContent = 'Remaining chance: 0';
+		retryCount.textContent = '剩餘次數：0';
 	}
 	const timerText = root.querySelector('.timer_text');
 	if (timerText) {

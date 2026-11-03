@@ -278,7 +278,7 @@ export function createQuestHelper(config) {
 					d.setUTCSeconds(quest.end_time);
 					const deadlineEl = root.querySelector('.quest-info-bottom-deadline-info-text');
 					if (deadlineEl) {
-						deadlineEl.textContent = `Deadline [${d.toLocaleString()}]`;
+						deadlineEl.textContent = `期限 [${d.toLocaleString()}]`;
 					}
 				}
 			}

@@ -678,16 +678,13 @@ Guild.init = function init() {
 			}
 
 			if (Session.isGuildMaster && !isSelf) {
-				ContextMenu.addElement(DB.getMessage(2923, 'Assign Guild Leader'), () => {
+				ContextMenu.addElement(DB.getMessage(2923, '委任公會會長'), () => {
 					// The message takes two placeholders: the member taking over,
 					// and the grade we are left with. The server swaps the two
 					// rows, so that is the grade the member holds right now.
 					const grade = _positions[member.GPositionID];
-					const text = DB.getMessage(
-						2924,
-						'Are you sure you want to assign %s as guild leader? After assigning your position will become %s'
-					)
-						.replace('%s', member.CharName || DB.getMessage(581, 'Nameless'))
+					const text = DB.getMessage(2924, '您確定要委任 %s 為公會會長嗎？委任後，您的職位將變為 %s')
+						.replace('%s', member.CharName || DB.getMessage(581, '無名氏'))
 						.replace('%s', grade && grade.posName ? grade.posName : '');
 
 					UIManager.showPromptBox(text, 'ok', 'cancel', () => {
@@ -1089,7 +1086,7 @@ function submitEmblem(file) {
 		if (isEmblem(data)) {
 			Guild.onSendEmblem(data);
 		} else {
-			UIManager.showMessageBox(DB.getMessage(3587, 'This file cannot be registered.'), 'ok');
+			UIManager.showMessageBox(DB.getMessage(3587, '無法上傳此檔案。'), 'ok');
 		}
 	};
 	reader.readAsArrayBuffer(file);
@@ -1155,11 +1152,7 @@ Guild.setMembers = function setMembers(members, hasMemo) {
 	// die without its author having touched a thing. Hence a word for it.
 	// @see docs/reference/guild/grade-change.md
 	if (_hasPendingPositions()) {
-		ChatBox.addText(
-			'The guild member list changed. The grade waiting to be applied was dropped.',
-			ChatBox.TYPE.ERROR,
-			ChatBox.FILTER.GUILD
-		);
+		ChatBox.addText('公會成員名單已變更，待套用的職級已取消。', ChatBox.TYPE.ERROR, ChatBox.FILTER.GUILD);
 	}
 
 	_clearPendingPositions();
@@ -1286,7 +1279,7 @@ Guild.setMember = function setMember(member) {
 
 	// The 0x0aa5 list carries no character name at all, and the client falls
 	// back to a placeholder rather than leaving the column blank.
-	const displayName = member.CharName || DB.getMessage(581, 'Nameless');
+	const displayName = member.CharName || DB.getMessage(581, '無名氏');
 
 	const nameValue = view.querySelector('.name .value');
 	if (nameValue) {
@@ -1301,7 +1294,7 @@ Guild.setMember = function setMember(member) {
 	if (lastLogin) {
 		lastLogin.textContent =
 			member.LastLogin && _config().showLastLogin
-				? DB.getMessage(3012, 'Last login: %s').replace('%s', _formatLastLogin(member.LastLogin))
+				? DB.getMessage(3012, '上次登入：%s').replace('%s', _formatLastLogin(member.LastLogin))
 				: '';
 	}
 
@@ -1409,7 +1402,7 @@ Guild.getMemberName = function getMemberName(GID) {
 
 	// A roster generation that carries no name, or a member already dropped from
 	// it, both land here.
-	return name || DB.getMessage(581, 'Nameless');
+	return name || DB.getMessage(581, '無名氏');
 };
 
 Guild.updateMemberStatus = function updateMemberStatus(member) {
@@ -1490,8 +1483,8 @@ Guild.updateMemberStatus = function updateMemberStatus(member) {
 	ChatBox.addText(
 		DB.getMessage(
 			member.status ? 485 : 486,
-			member.status ? 'Guild Member %s has connected.' : 'Guild Member %s has disconnected.'
-		).replace('%s', current.CharName || DB.getMessage(581, 'Nameless')),
+			member.status ? '公會成員（%s先生，小姐）上線了。' : '公會成員（%s先生，小姐）離線了。'
+		).replace('%s', current.CharName || DB.getMessage(581, '無名氏')),
 		ChatBox.TYPE.BLUE,
 		ChatBox.FILTER.GUILD
 	);
@@ -1612,7 +1605,7 @@ Guild.setPositions = function setPositions(positions, erase) {
 			ChatBox.addText(
 				// The table's own text has the cap written into it rather than a
 				// placeholder, so take either form and put the real number in.
-				DB.getMessage(3486, "You can't enter value more than 50%.").replace(/%[ds]|\d+/, rank.payRate),
+				DB.getMessage(3486, '不能輸入超過50%的值。').replace(/%[ds]|\d+/, rank.payRate),
 				ChatBox.TYPE.ERROR,
 				ChatBox.FILTER.GUILD
 			);
@@ -1781,7 +1774,7 @@ Guild.addSkill = function addSkill(skill) {
 		`<div class="name">${_escapeHTML(sk.SkillName)}</div>` +
 		'<div class="levelline">' +
 		`<div class="level">Lv : <span class="current">${skill.level}</span></div>` +
-		`<div class="consume">${skill.type ? `Sp : <span class="spcost">${skill.spcost}</span>` : 'Passive'}</div>` +
+		`<div class="consume">${skill.type ? `Sp : <span class="spcost">${skill.spcost}</span>` : '被動'}</div>` +
 		'</div></div>';
 
 	if (!skill.upgradable || !_skpoints || !Session.isGuildMaster) {
@@ -2131,7 +2124,7 @@ Guild.setExpelList = function setExpelList(list) {
 		if (nameCell) {
 			// The 0x0a87 list carries a char id and no name, the same way the
 			// 0x0aa5 member list does, so it falls back the same way.
-			nameCell.textContent = list[i].charname || DB.getMessage(581, 'Nameless');
+			nameCell.textContent = list[i].charname || DB.getMessage(581, '無名氏');
 		}
 		const reasonCell = element.querySelector('.reason');
 		if (reasonCell) {
@@ -2689,7 +2682,7 @@ Guild.promptDisbandGuild = function promptDisbandGuild() {
 	// OK-only, and the answer is discarded - the client opens the name window
 	// either way.
 	// @see docs/reference/guild/create-disband-dialogs.md
-	const warning = DB.getMessage(2564, 'If you are using a guild storage, all items inside it will disappear.');
+	const warning = DB.getMessage(2564, '若您正在使用公會倉庫，倉庫內的所有道具都將消失。');
 
 	UIManager.showMessageBox(warning, 'ok', () => {
 		GuildCompanion.openDisband();

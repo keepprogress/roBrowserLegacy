@@ -102,7 +102,7 @@ class LoginEngine {
 		}
 
 		if (!PACKETVER.value) {
-			UIManager.showErrorBox('Sorry, no PACKETVER configs found.');
+			UIManager.showErrorBox('很抱歉，找不到 PACKETVER 設定。');
 			return;
 		}
 

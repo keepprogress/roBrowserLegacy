@@ -6,7 +6,7 @@
 				data-background="basic_interface/sys_base_off.bmp"
 				data-hover="basic_interface/sys_base_on.bmp"
 			></button>
-			<span class="text" data-text="1484">Graphics Settings</span>
+			<span class="text" data-text="1484">畫面設定</span>
 		</div>
 		<div class="right">
 			<button
@@ -20,8 +20,8 @@
 
 	<div class="tabs-container">
 		<div class="tabs">
-			<button class="tab-button selected" data-tab="basic">Basic</button>
-			<button class="tab-button" data-tab="advanced">Advanced</button>
+			<button class="tab-button selected" data-tab="basic">基本設定</button>
+			<button class="tab-button" data-tab="advanced">進階</button>
 		</div>
 	</div>
 
@@ -29,7 +29,7 @@
 		<div class="tab-content selected" id="basic">
 			<table>
 				<tr>
-					<td>Details</td>
+					<td>細節</td>
 					<td style="display: inline-block; width: 260px">
 						<input
 							class="details"
@@ -43,7 +43,7 @@
 					</td>
 				</tr>
 				<tr class="resolution">
-					<td>Resolution</td>
+					<td>解析度</td>
 					<td>
 						<select class="screensize">
 							<option value="650x480">640 x 480</option>
@@ -52,24 +52,24 @@
 							<option value="1280x800">1280 x 800</option>
 							<option value="1400x900">1400 x 900</option>
 							<option value="1680x1050">1680 x 1050</option>
-							<option value="full">Full Screen</option>
+							<option value="full">全螢幕</option>
 						</select>
 					</td>
 				</tr>
 				<tr>
-					<td>Cursor</td>
+					<td>滑鼠游標</td>
 					<td>
 						<label>
 							<input class="cursor-option" type="checkbox" />
-							Show official cursor
+							顯示官方滑鼠游標
 						</label>
 					</td>
 				</tr>
 				<tr>
-					<td>FPS Limit</td>
+					<td>FPS 上限</td>
 					<td>
 						<select class="fpslimit">
-							<option value="-1">Match display</option>
+							<option value="-1">與顯示器同步</option>
 							<option value="30">30</option>
 							<option value="60">60</option>
 							<option value="90">90</option>
@@ -78,7 +78,7 @@
 					</td>
 				</tr>
 				<tr>
-					<td>FPS Display</td>
+					<td>顯示 FPS</td>
 					<td>
 						<label>
 							<input class="fps" type="checkbox" />
@@ -91,24 +91,24 @@
 		<div class="tab-content" id="advanced">
 			<table>
 				<tr>
-					<td title="Force nearest neighbor filtering for pixel-perfect sprite rendering">
-						Pixel Perfect Sprites
+					<td title="強制使用最近鄰過濾，以呈現像素完美的精靈圖">
+						像素完美精靈圖
 					</td>
 					<td>
 						<label>
 							<input class="pixel-perfect" type="checkbox" />
-							Force nearest neighbor filtering
+							強制使用最近鄰過濾
 						</label>
 					</td>
 				</tr>
 				<tr>
-					<td title="Add a glowing bloom effect to bright areas">Bloom</td>
+					<td title="為明亮區域加上發光的泛光效果">泛光</td>
 					<td>
 						<label style="display: inline-block; margin-right: 20px">
 							<input class="bloom" type="checkbox" />
 						</label>
 						<label style="display: inline-block; width: 200px">
-							Intensity:
+							強度:
 							<input
 								class="bloom-intensity"
 								type="range"
@@ -122,13 +122,13 @@
 					</td>
 				</tr>
 				<tr>
-					<td title="Apply a blur effect to the screen">Blur</td>
+					<td title="對畫面套用模糊效果">模糊</td>
 					<td>
 						<label style="display: inline-block; margin-right: 20px">
 							<input class="blur" type="checkbox" />
 						</label>
 						<label style="display: inline-block; width: 90px">
-							Intensity:
+							強度:
 							<input
 								class="blur-intensity"
 								type="range"
@@ -140,7 +140,7 @@
 							/>
 						</label>
 						<label style="display: inline-block; width: 90px">
-							Area:
+							範圍:
 							<input
 								class="blur-area"
 								type="range"
@@ -154,13 +154,13 @@
 					</td>
 				</tr>
 				<tr>
-					<td title="Contrast Adaptive Sharpening for enhanced details">Contr. Adapt. Sharp. (CAS)</td>
+					<td title="用於增強細節的對比自適應銳化">對比自適應銳化 (CAS)</td>
 					<td>
 						<label style="display: inline-block; margin-right: 20px">
 							<input class="casEnabled" type="checkbox" />
 						</label>
 						<label style="display: inline-block; width: 90px">
-							Contrast:
+							對比度:
 							<input
 								class="casContrast"
 								type="range"
@@ -172,7 +172,7 @@
 							/>
 						</label>
 						<label style="display: inline-block; width: 90px">
-							Sharpening:
+							銳化:
 							<input
 								class="casSharpening"
 								type="range"
@@ -186,13 +186,13 @@
 					</td>
 				</tr>
 				<tr>
-					<td title="Fast Approximate Anti-Aliasing for smoother edges">FXAA</td>
+					<td title="快速近似抗鋸齒，讓邊緣更平滑">FXAA</td>
 					<td>
 						<label style="display: inline-block; margin-right: 20px">
 							<input class="fxaaEnabled" type="checkbox" />
 						</label>
 						<label style="display: inline-block; width: 90px">
-							Subpix:
+							次像素:
 							<input
 								class="fxaaSubpix"
 								type="range"
@@ -204,7 +204,7 @@
 							/>
 						</label>
 						<label style="display: inline-block; width: 90px">
-							Edge Threshold:
+							邊緣閾值:
 							<input
 								class="fxaaEdgeThreshold"
 								type="range"
@@ -218,13 +218,13 @@
 					</td>
 				</tr>
 				<tr>
-					<td title="Cartoon rendering effect for stylized visuals">Cartoon</td>
+					<td title="適用於風格化畫面的卡通渲染效果">卡通</td>
 					<td>
 						<label style="display: inline-block; margin-right: 20px">
 							<input class="cartoonEnabled" type="checkbox" />
 						</label>
 						<label style="display: inline-block; width: 90px">
-							Power:
+							強度:
 							<input
 								class="cartoonPower"
 								type="range"
@@ -236,7 +236,7 @@
 							/>
 						</label>
 						<label style="display: inline-block; width: 90px">
-							Edge Slope:
+							邊緣斜率:
 							<input
 								class="cartoonEdgeSlope"
 								type="range"
@@ -250,13 +250,13 @@
 					</td>
 				</tr>
 				<tr>
-					<td title="Increase color intensity and saturation">Vibrance</td>
+					<td title="提高色彩強度與飽和度">鮮豔度</td>
 					<td>
 						<label style="display: inline-block; margin-right: 20px">
 							<input class="vibranceEnabled" type="checkbox" />
 						</label>
 						<label style="display: inline-block; width: 200px">
-							Intensity:
+							強度:
 							<input
 								class="vibrance"
 								type="range"
@@ -271,16 +271,16 @@
 				</tr>
 				<tr>
 					<td
-						title="Hide objects outside the viewing area, enable downsampling rendering and others to improve performance"
+						title="隱藏可視範圍外的物件、啟用降採樣渲染等功能以提升效能"
 					>
-						Performance Mode
+						效能模式
 					</td>
 					<td>
 						<label style="display: inline-block; margin-right: 20px">
 							<input class="performanceMode" type="checkbox" />
 						</label>
 						<label style="display: inline-block; width: 200px">
-							Culling Area:
+							剔除範圍:
 							<input
 								class="view-area"
 								type="range"
@@ -295,20 +295,20 @@
 				</tr>
 				<tr>
 					<td
-						title="Make buildings and trees blocking the view of your character see-through (not in first person). Dither is cheaper, Alpha looks smoother."
+						title="讓遮擋角色視線的建築與樹木變為半透明（第一人稱視角下無效）。抖動較省資源，透明混合較為平滑。"
 					>
-						See-through Occluders
+						遮擋物半透明
 					</td>
 					<td>
 						<label style="display: inline-block; margin-right: 20px">
 							<select class="occluderFade">
-								<option value="off">Off</option>
-								<option value="dither">Dither (fast)</option>
-								<option value="alpha">Alpha (smooth)</option>
+								<option value="off">關閉</option>
+								<option value="dither">抖動 (快速)</option>
+								<option value="alpha">透明混合 (平滑)</option>
 							</select>
 						</label>
 						<label style="display: inline-block; width: 120px">
-							Opacity:
+							不透明度:
 							<input
 								class="occluderFadeOpacity"
 								type="range"
@@ -320,7 +320,7 @@
 							/>
 						</label>
 						<label style="display: inline-block; width: 120px">
-							Area:
+							範圍:
 							<input
 								class="occluderFadeRadius"
 								type="range"
@@ -336,7 +336,7 @@
 			</table>
 
 			<div class="reset-section">
-				<button class="reset-button">Reset to Default Values</button>
+				<button class="reset-button">重設為預設值</button>
 			</div>
 		</div>
 	</div>

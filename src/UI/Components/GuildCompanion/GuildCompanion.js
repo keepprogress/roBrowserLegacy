@@ -61,7 +61,7 @@ GuildCompanion.init = function init() {
 
 		if (!name.length) {
 			// The client raises this rather than doing nothing.
-			UIManager.showMessageBox(DB.getMessage(2080, 'You must enter the name of your guild.'), 'ok', () => {
+			UIManager.showMessageBox(DB.getMessage(2080, '請輸入公會名稱。'), 'ok', () => {
 				input.focus();
 			});
 			return;
@@ -72,7 +72,7 @@ GuildCompanion.init = function init() {
 			// all, so without this the dialog waits forever.
 			// @see docs/reference/guild/create-disband-dialogs.md
 			if (Session.guildName && name !== Session.guildName) {
-				UIManager.showMessageBox(DB.getMessage(401, 'You have failed to disband the guild.'), 'ok', () => {
+				UIManager.showMessageBox(DB.getMessage(401, '公會解散失敗。'), 'ok', () => {
 					input.value = '';
 					input.focus();
 				});

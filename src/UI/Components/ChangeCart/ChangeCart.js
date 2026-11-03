@@ -112,9 +112,9 @@ ChangeCart.onChangeCartSkill = function onChangeCartSkill() {
 	if (Session.Entity.hasCart == false) {
 		return;
 	}
-	let msg = 'Change Cart!!';
+	let msg = '更換手推車！';
 	if (ChatRoom.isOpen) {
-		msg = 'Close your Room first!!';
+		msg = '請先關閉你的聊天室！';
 		ChatRoom.message(msg);
 		return;
 	}

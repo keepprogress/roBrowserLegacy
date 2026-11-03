@@ -182,7 +182,7 @@ WhisperBox.show = function show(nickname, bHasMessage) {
 		const isFriend = Friends && Friends.default.isFriend ? Friends.default.isFriend(nickname) : false;
 		const titleEl = root.querySelector('.title');
 		if (titleEl) {
-			titleEl.textContent = `With ${nickname}${isFriend ? ' (Friend)' : ''}`;
+			titleEl.textContent = `與 ${nickname}${isFriend ? ' (Friend)' : ''} 的悄悄話`;
 		}
 	});
 

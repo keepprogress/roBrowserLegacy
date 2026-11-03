@@ -101,7 +101,7 @@ class ScreenShot {
 		const url = window.URL.createObjectURL(new Blob([data], { type: 'image/png' }));
 
 		ChatBox.addText(
-			`Screenshot ${date} can be saved by <a style="color:#F88" download="ScreenShot (${date.replace('/', '-')}).png" href="${url}" target="_blank">clicking here</a>.`,
+			`截圖 ${date} 可<a style="color:#F88" download="ScreenShot (${date.replace('/', '-')}).png" href="${url}" target="_blank">點擊此處</a>儲存。`,
 			ChatBox.TYPE.PUBLIC,
 			ChatBox.FILTER.PUBLIC_LOG,
 			null,

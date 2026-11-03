@@ -51,7 +51,7 @@ let aliases = {};
 
 const CommandStore = {
 	sound: {
-		description: 'Toggles playing of sound effects',
+		description: '切換音效播放',
 		callback: function () {
 			this.addText(DB.getMessage(27 + AudioPreferences.Sound.play), this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 			AudioPreferences.Sound.play = !AudioPreferences.Sound.play;
@@ -62,7 +62,7 @@ const CommandStore = {
 		}
 	},
 	bgm: {
-		description: 'Toggles playing of background music',
+		description: '切換背景音樂播放',
 		callback: function () {
 			this.addText(DB.getMessage(31 + AudioPreferences.BGM.play), this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 			AudioPreferences.BGM.play = !AudioPreferences.BGM.play;
@@ -77,7 +77,7 @@ const CommandStore = {
 		}
 	},
 	effect: {
-		description: 'Toggles the display of anything but basic graphical effects',
+		description: '切換基本圖像特效以外的所有效果顯示',
 		callback: function () {
 			this.addText(DB.getMessage(23 + MapPreferences.effect), this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 			MapPreferences.effect = !MapPreferences.effect;
@@ -86,7 +86,7 @@ const CommandStore = {
 		}
 	},
 	mineffect: {
-		description: "Enables less graphically intense effects. This command does not work for Wizard's AoE skills.",
+		description: '啟用負擔較低的特效。此指令對法師的範圍技能無效。',
 		callback: function () {
 			this.addText(DB.getMessage(687 + MapPreferences.mineffect), this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 			MapPreferences.mineffect = !MapPreferences.mineffect;
@@ -95,7 +95,7 @@ const CommandStore = {
 		}
 	},
 	miss: {
-		description: 'Toggles display of the ‘miss’ animation',
+		description: '切換「miss」動畫的顯示',
 		callback: function () {
 			this.addText(DB.getMessage(317 + MapPreferences.miss), this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 			MapPreferences.miss = !MapPreferences.miss;
@@ -104,13 +104,13 @@ const CommandStore = {
 		}
 	},
 	li: {
-		description: 'Toggles the chat announcements when a friend or a guild member connects or disconnects',
+		description: '切換好友或公會成員上/下線時的聊天通知',
 		callback: function () {
 			// The client reports the state it is switching *to*, which reading the
 			// flag before flipping it gives.
 			const line = UIPreferences.li
-				? DB.getMessage(1045, 'Do not display online status of friends in Chat Window.  [/li OFF]')
-				: DB.getMessage(1044, 'Display online status of friends in Chat Window. [/li ON]');
+				? DB.getMessage(1045, '不在聊天視窗顯示好友的上/下線狀態。[/li OFF]')
+				: DB.getMessage(1044, '在聊天視窗顯示好友的上/下線狀態。[/li ON]');
 
 			this.addText(line, this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 			UIPreferences.li = !UIPreferences.li;
@@ -119,7 +119,7 @@ const CommandStore = {
 		}
 	},
 	aura: {
-		description: 'Minimizes the aura effect for level 99 and 175 characters',
+		description: '縮小等級 99 與 175 角色的光圈特效',
 		callback: function () {
 			const isSimplified = MapPreferences.aura > 1;
 			this.addText(DB.getMessage(711 + isSimplified), this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
@@ -133,12 +133,12 @@ const CommandStore = {
 		}
 	},
 	aura2: {
-		description: 'Disables the aura effect for level 99 and 175 characters',
+		description: '停用等級 99 與 175 角色的光圈特效',
 		callback: function () {
 			this.addText(
 				DB.getMessage(
 					2994 + MapPreferences.aura,
-					MapPreferences.aura ? 'Aura effect is OFF' : 'Aura effect is ON' // default text if not in DB msgstringtable
+					MapPreferences.aura ? '光圈特效已關閉' : '光圈特效已開啟' // default text if not in DB msgstringtable
 				),
 				this.TYPE.INFO,
 				this.FILTER.PUBLIC_LOG
@@ -153,7 +153,7 @@ const CommandStore = {
 		}
 	},
 	showname: {
-		description: 'Returns to the original font',
+		description: '恢復原本的字型',
 		callback: function () {
 			this.addText(DB.getMessage(722 + MapPreferences.showname), this.TYPE.INFO);
 			MapPreferences.showname = !MapPreferences.showname;
@@ -167,7 +167,7 @@ const CommandStore = {
 		}
 	},
 	camera: {
-		description: "Turns camera 'smoothing' off and on.",
+		description: '切換鏡頭「平滑」效果的開啟與關閉。',
 		callback: function () {
 			this.addText(DB.getMessage(319 + CameraPreferences.smooth), this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 			CameraPreferences.smooth = !CameraPreferences.smooth;
@@ -177,7 +177,7 @@ const CommandStore = {
 	},
 
 	fog: {
-		description: 'Turns fog on and off',
+		description: '開啟或關閉霧效',
 		callback: function () {
 			MapPreferences.fog = !MapPreferences.fog;
 			this.addText('fog ' + (MapPreferences.fog ? 'on' : 'off'), this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
@@ -187,7 +187,7 @@ const CommandStore = {
 	},
 
 	lightmap: {
-		description: 'Removes shade effects and a majority of lighting effects',
+		description: '移除陰影效果與大部分光影效果',
 		callback: function () {
 			MapPreferences.lightmap = !MapPreferences.lightmap;
 			MapPreferences.save();
@@ -196,7 +196,7 @@ const CommandStore = {
 	},
 
 	smoothlight: {
-		description: 'Cycles the posterization effect of the lightmap: on, off, off with gamma correction',
+		description: '循環切換光照貼圖的色調分離效果：開啟、關閉、關閉但套用伽瑪校正',
 		callback: function () {
 			MapPreferences.smoothlight = (MapPreferences.smoothlight + 1) % 3;
 			const messages = ['Posterization On', 'Smoothlight On', 'Smoothlight On with Gamma Correction'];
@@ -207,7 +207,7 @@ const CommandStore = {
 	},
 
 	noctrl: {
-		description: 'Allows attacking monsters continuously with only one left-click',
+		description: '只需按一次滑鼠左鍵即可持續攻擊怪物',
 		callback: function () {
 			this.addText(DB.getMessage(717 + ControlPreferences.noctrl), this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 			ControlPreferences.noctrl = !ControlPreferences.noctrl;
@@ -230,7 +230,7 @@ const CommandStore = {
 	},
 
 	snap: {
-		description: 'The mouse cursor semi-automatically moves to the target',
+		description: '滑鼠游標會半自動移動到目標',
 		callback: function () {
 			this.addText(DB.getMessage(271 + ControlPreferences.snap), this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 			ControlPreferences.snap = !ControlPreferences.snap;
@@ -240,7 +240,7 @@ const CommandStore = {
 	},
 
 	itemsnap: {
-		description: 'The mouse cursor semi-automatically moves to the loot',
+		description: '滑鼠游標會半自動移動到掉落物',
 		callback: function () {
 			this.addText(DB.getMessage(276 + ControlPreferences.itemsnap), this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 			ControlPreferences.itemsnap = !ControlPreferences.itemsnap;
@@ -249,11 +249,11 @@ const CommandStore = {
 		}
 	},
 	window: {
-		description: 'Toggles snapping/magnetism between windows',
+		description: '切換視窗之間的吸附（磁吸）功能',
 		callback: function () {
 			UIPreferences.windowmagnet = !UIPreferences.windowmagnet;
 			this.addText(
-				'Window magnet ' + (UIPreferences.windowmagnet ? 'ON' : 'OFF'),
+				'視窗磁吸 ' + (UIPreferences.windowmagnet ? 'ON' : 'OFF'),
 				this.TYPE.INFO,
 				this.FILTER.PUBLIC_LOG
 			);
@@ -264,7 +264,7 @@ const CommandStore = {
 	},
 
 	stand: {
-		description: 'Makes your character sit or stand',
+		description: '讓您的角色坐下或站起',
 		callback: function () {
 			let pkt;
 			if (PACKETVER.value >= 20180307) {
@@ -284,7 +284,7 @@ const CommandStore = {
 	},
 
 	doridori: {
-		description: "Moves your character's head from side to side",
+		description: '讓您的角色頭部左右擺動',
 		callback: function () {
 			let pkt;
 			Session.Entity.headDir = Session.Entity.headDir === 1 ? 2 : 1;
@@ -320,7 +320,7 @@ const CommandStore = {
 	},
 
 	bangbang: {
-		description: 'Rotates your character clockwise',
+		description: '讓您的角色順時針旋轉',
 		callback: function () {
 			let pkt;
 			Session.Entity.direction = (Session.Entity.direction + 1) % 8;
@@ -337,7 +337,7 @@ const CommandStore = {
 	},
 
 	bingbing: {
-		description: 'Rotates your character counterclockwise',
+		description: '讓您的角色逆時針旋轉',
 		callback: function () {
 			let pkt;
 			Session.Entity.direction = (Session.Entity.direction + 7) % 8;
@@ -354,7 +354,7 @@ const CommandStore = {
 	},
 
 	where: {
-		description: "Shows your character's location as a map name and set of coordinates",
+		description: '以地圖名稱與座標顯示您的角色位置',
 		callback: function () {
 			const currentMap = MapRenderer.currentMap;
 			this.addText(
@@ -373,7 +373,7 @@ const CommandStore = {
 	},
 
 	who: {
-		description: 'Shows the current number of players on the server',
+		description: '顯示伺服器目前的上線人數',
 		callback: function () {
 			const pkt = new PACKET.CZ.REQ_USER_COUNT();
 			Network.sendPacket(pkt);
@@ -383,7 +383,7 @@ const CommandStore = {
 	},
 
 	memo: {
-		description: 'Memorizes a location for use with the Warp Portal skill',
+		description: '記錄一個地點，供傳送之陣技能使用',
 		callback: function () {
 			const pkt = new PACKET.CZ.REMEMBER_WARPPOINT();
 			Network.sendPacket(pkt);
@@ -392,7 +392,7 @@ const CommandStore = {
 	},
 
 	chat: {
-		description: 'Creates a chat room',
+		description: '建立聊天室',
 		callback: function () {
 			ChatRoomCreate.show();
 			return;
@@ -400,7 +400,7 @@ const CommandStore = {
 	},
 
 	q: {
-		description: 'Leaves a chat room',
+		description: '離開聊天室',
 		callback: function () {
 			ChatRoom.remove();
 			return;
@@ -408,7 +408,7 @@ const CommandStore = {
 	},
 
 	leave: {
-		description: 'Allows one to leave a party',
+		description: '離開隊伍',
 		callback: function () {
 			Group.onRequestLeave();
 			return;
@@ -416,7 +416,7 @@ const CommandStore = {
 	},
 
 	invite: {
-		description: '"<name>" Invite a person to your party. Works across different maps',
+		description: '「<name>」邀請其他人加入您的隊伍。可跨地圖使用',
 		callback: function (text) {
 			const matches = text.match(/^invite\s+(")?([^"]+)(")?/);
 			if (matches && matches[2]) {
@@ -427,7 +427,7 @@ const CommandStore = {
 	},
 
 	organize: {
-		description: 'Creates a party named <Party Name>',
+		description: '建立名為 <Party Name> 的隊伍',
 		callback: function (text) {
 			const matches = text.match(/^organize\s+(")?([^"]+)(")?/);
 			if (matches && matches[2]) {
@@ -438,7 +438,7 @@ const CommandStore = {
 	},
 
 	hi: {
-		description: 'Sends the specified message to everyone on your friend list',
+		description: '傳送指定訊息給好友名單上的所有人',
 		callback: function () {
 			Friends.sayHi();
 			return;
@@ -446,7 +446,7 @@ const CommandStore = {
 	},
 
 	ex: {
-		description: 'Blocks whispers from <Character Name>, or lists the blocked characters',
+		description: '封鎖來自 <Character Name> 的悄悄話，或列出已封鎖的角色',
 		callback: function (text) {
 			const matches = text.match(/^ex\s+(.*\S)/);
 			if (matches) {
@@ -460,7 +460,7 @@ const CommandStore = {
 	},
 
 	in: {
-		description: 'Allows whispers from <Character Name>',
+		description: '允許來自 <Character Name> 的悄悄話',
 		callback: function (text) {
 			const matches = text.match(/^in\s+(.*\S)/);
 			if (matches) {
@@ -473,7 +473,7 @@ const CommandStore = {
 	},
 
 	exall: {
-		description: 'Blocks whispers from everyone',
+		description: '封鎖所有人的悄悄話',
 		callback: function () {
 			const pkt = new PACKET.CZ.SETTING_WHISPER_STATE();
 			pkt.type = 0;
@@ -482,7 +482,7 @@ const CommandStore = {
 	},
 
 	inall: {
-		description: 'Allows whispers from everyone',
+		description: '允許所有人的悄悄話',
 		callback: function () {
 			const pkt = new PACKET.CZ.SETTING_WHISPER_STATE();
 			pkt.type = 1;
@@ -491,7 +491,7 @@ const CommandStore = {
 	},
 
 	guild: {
-		description: "Creates a guild named <Guild Name>. This requires an Emperium to be in the creator's inventory",
+		description: '建立名為 <Guild Name> 的公會。需要建立者的物品欄中持有華麗金屬',
 		callback: function (text) {
 			const matches = text.match(/^guild\s+(")?([^"]+)(")?/);
 			if (matches && matches[2]) {
@@ -502,7 +502,7 @@ const CommandStore = {
 	},
 
 	guildinvite: {
-		description: 'Invites the specified player to your guild',
+		description: '邀請指定的玩家加入您的公會',
 		callback: function (text) {
 			const matches = text.match(/^guildinvite\s+(.+)/);
 			if (matches && matches[1]) {
@@ -510,12 +510,12 @@ const CommandStore = {
 				return;
 			}
 
-			this.addText('Usage: /guildinvite <Character Name>', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
+			this.addText('用法：/guildinvite <Character Name>', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 		}
 	},
 
 	breakguild: {
-		description: 'Disbands a guild. Can only be used by the guild leader. All members must be expelled first',
+		description: '解散公會。僅公會會長可使用，須先踢除所有成員',
 		callback: function (text) {
 			const matches = text.match(/^breakguild\s+(")?([^"]+)(")?/);
 			if (matches && matches[2]) {
@@ -526,7 +526,7 @@ const CommandStore = {
 	},
 
 	alchemist: {
-		description: 'Shows the top 10 brewing Alchemists in the server.',
+		description: '顯示伺服器中前 10 名製作藥品的鍊金術師。',
 		callback: function () {
 			if (PACKETVER.value >= 20130605) {
 				const pkt = new PACKET.CZ.RANKING();
@@ -541,7 +541,7 @@ const CommandStore = {
 	},
 
 	blacksmith: {
-		description: 'Shows the top 10 forging/upgrading Blacksmiths in the server',
+		description: '顯示伺服器中前 10 名鍛造/精煉的鐵匠',
 		callback: function () {
 			if (PACKETVER.value >= 20130605) {
 				const pkt = new PACKET.CZ.RANKING();
@@ -556,7 +556,7 @@ const CommandStore = {
 	},
 
 	taekwon: {
-		description: 'Shows the top 10 TaeKwon Kids based on completion of TaeKwon Missions in the server',
+		description: '依完成跆拳任務的次數，顯示伺服器中前 10 名跆拳少年',
 		callback: function () {
 			if (PACKETVER.value >= 20130605) {
 				const pkt = new PACKET.CZ.RANKING();
@@ -571,7 +571,7 @@ const CommandStore = {
 	},
 
 	hoai: {
-		description: 'Switches Homunculus AI between default and custom mode',
+		description: '切換生命體 AI 的預設與自訂模式',
 		callback: function () {
 			Session.homCustomAI = !Session.homCustomAI;
 			if (Session.homCustomAI) {
@@ -586,7 +586,7 @@ const CommandStore = {
 	},
 
 	merai: {
-		description: 'Switches Mercenary AI between default and custom mode',
+		description: '切換傭兵 AI 的預設與自訂模式',
 		callback: function () {
 			Session.merCustomAI = !Session.merCustomAI;
 			if (Session.merCustomAI) {
@@ -600,7 +600,7 @@ const CommandStore = {
 		}
 	},
 	call: {
-		description: 'Toggles the ability to be Urgent Called.',
+		description: '切換是否可被緊急召集。',
 		callback: function () {
 			const pkt = new PACKET.CZ.CONFIG();
 			pkt.Config = 1;
@@ -611,7 +611,7 @@ const CommandStore = {
 	},
 
 	cl: {
-		description: 'Sends a message to the player clan.',
+		description: '傳送訊息給玩家所屬的公會。',
 		callback: function (text) {
 			const pkt = new PACKET.CZ.CLAN_CHAT();
 			const matches = text.match(/(^cl)\s+(.*)/);
@@ -627,7 +627,7 @@ const CommandStore = {
 	 *  GM COMMANDS
 	 */
 	broadcast: {
-		description: 'Sends a broadcast message with your name (yellow).',
+		description: '以您的名字發送廣播訊息（黃色）。',
 		callback: function (text) {
 			const matches = text.match(/(^broadcast|^b)\s+(.*)/);
 			if (matches && matches[2]) {
@@ -640,7 +640,7 @@ const CommandStore = {
 		aliases: ['b']
 	},
 	nb: {
-		description: 'Sends a broadcast message without your name (yellow).',
+		description: '發送不附上您名字的廣播訊息（黃色）。',
 		callback: function (text) {
 			const matches = text.match(/(^nb)\s+(.*)/);
 			if (matches && matches[2]) {
@@ -652,7 +652,7 @@ const CommandStore = {
 		}
 	},
 	localbroadcast: {
-		description: 'Sends a local broadcast message with your name. (yellow)',
+		description: '以您的名字發送本地廣播訊息。（黃色）',
 		callback: function (text) {
 			const matches = text.match(/(^localbroadcast|^lb)\s+(.*)/);
 			if (matches && matches[2]) {
@@ -665,7 +665,7 @@ const CommandStore = {
 		aliases: ['lb']
 	},
 	nlb: {
-		description: 'Sends a local broadcast message without your name. (yellow)',
+		description: '發送不附上您名字的本地廣播訊息。（黃色）',
 		callback: function (text) {
 			const matches = text.match(/(^nlb)\s+(.*)/);
 			if (matches && matches[2]) {
@@ -677,7 +677,7 @@ const CommandStore = {
 		}
 	},
 	mapmove: {
-		description: 'Move to map x y.',
+		description: '移動到地圖 x y 座標。',
 		callback: function (text) {
 			const matches = text.match(/(^mapmove|^mm)\s+([\w.]+)\s+(\d+)\s+(\d+)/);
 			if (matches) {
@@ -692,7 +692,7 @@ const CommandStore = {
 		aliases: ['mm']
 	},
 	shift: {
-		description: 'Warp to a character.',
+		description: '傳送到指定角色。',
 		callback: function (text) {
 			const matches = text.match(/^shift\s+(")?([^"]+)(")?/);
 			if (matches && matches[2]) {
@@ -704,7 +704,7 @@ const CommandStore = {
 		}
 	},
 	summon: {
-		description: 'Recall a player to your position.',
+		description: '將玩家召喚到您的位置。',
 		callback: function (text) {
 			const matches = text.match(/^summon\s+(")?([^"]+)(")?/);
 			if (matches && matches[2]) {
@@ -716,7 +716,7 @@ const CommandStore = {
 		}
 	},
 	recall: {
-		description: 'Recall a player by account name.',
+		description: '依帳號名稱召喚玩家。',
 		callback: function (text) {
 			const matches = text.match(/^recall\s+(.*)/);
 			if (matches && matches[1]) {
@@ -728,7 +728,7 @@ const CommandStore = {
 		}
 	},
 	hide: {
-		description: 'Toggle Perfect Hide.',
+		description: '切換完美隱藏。',
 		callback: function () {
 			// Server handles toggle state
 			const pkt = new PACKET.CZ.CHANGE_EFFECTSTATE();
@@ -738,7 +738,7 @@ const CommandStore = {
 		}
 	},
 	kill: {
-		description: 'Disconnect a player (needs account id).',
+		description: '斷開玩家連線（需要帳號 ID）。',
 		callback: function (text) {
 			const matches = text.match(/(^kill)\s+(\d+)/);
 			if (matches) {
@@ -750,7 +750,7 @@ const CommandStore = {
 		}
 	},
 	killall: {
-		description: 'Disconnect all players.',
+		description: '斷開所有玩家的連線。',
 		callback: function () {
 			const pkt = new PACKET.CZ.DISCONNECT_ALL_CHARACTER();
 			Network.sendPacket(pkt);
@@ -758,7 +758,7 @@ const CommandStore = {
 		}
 	},
 	item: {
-		description: 'Create Item or Monster (uses AEGIS name).',
+		description: '建立道具或怪物（使用 AEGIS 名稱）。',
 		callback: function (text) {
 			const matches = text.match(/(^item|^monster)\s+(")?([^"]+)(")?/);
 			if (matches && matches[3]) {
@@ -771,7 +771,7 @@ const CommandStore = {
 		aliases: ['monster']
 	},
 	resetstate: {
-		description: 'Reset Stats.',
+		description: '重置能力值。',
 		callback: function () {
 			const pkt = new PACKET.CZ.RESET();
 			pkt.type = 0;
@@ -780,7 +780,7 @@ const CommandStore = {
 		}
 	},
 	resetskill: {
-		description: 'Reset Skills.',
+		description: '重置技能。',
 		callback: function () {
 			const pkt = new PACKET.CZ.RESET();
 			pkt.type = 1;
@@ -789,7 +789,7 @@ const CommandStore = {
 		}
 	},
 	remove: {
-		description: 'Remove a player (need account name)',
+		description: '移除玩家（需要帳號名稱）',
 		callback: function (text) {
 			const matches = text.match(/(^remove)\s+(.*)/);
 			if (matches) {
@@ -801,7 +801,7 @@ const CommandStore = {
 		}
 	},
 	changemaptype: {
-		description: 'Change a cell type (x,y,type).',
+		description: '變更地圖格子類型（x,y,type）。',
 		callback: function (text) {
 			const matches = text.match(/(^changemaptype|cmt)\s+(\d+)\s+(\d+)\s+(\d+)/);
 			if (matches) {
@@ -816,7 +816,7 @@ const CommandStore = {
 		aliases: ['cmt']
 	},
 	check: {
-		description: 'Check stats of a player (GM command).',
+		description: '查看玩家能力值（GM 指令）。',
 		callback: function (text) {
 			const matches = text.match(/^check\s+(")?([^"]+)(")?/);
 			if (matches && matches[2]) {
@@ -829,7 +829,7 @@ const CommandStore = {
 		}
 	},
 	macro_register: {
-		description: 'Open the interface to upload image to captcha system',
+		description: '開啟驗證碼系統的圖片上傳介面',
 		callback: function () {
 			CaptchaUpload.prepare();
 			CaptchaUpload.append();
@@ -837,7 +837,7 @@ const CommandStore = {
 		aliases: ['mr']
 	},
 	macro_detector: {
-		description: 'Open the macro detector interface',
+		description: '開啟巨集偵測介面',
 		callback: function () {
 			CaptchaSelector.prepare();
 			CaptchaSelector.append();
@@ -845,7 +845,7 @@ const CommandStore = {
 		aliases: ['md']
 	},
 	macro_preview: {
-		description: 'Request to preview a captcha image',
+		description: '請求預覽驗證碼圖片',
 		callback: function (text) {
 			const matches = text.match(/^macro_preview\s+(\d+)/);
 			if (matches && matches[1]) {
@@ -857,7 +857,7 @@ const CommandStore = {
 		}
 	},
 	navi: {
-		description: 'Navigate to a map location. Usage: /navi mapname x y',
+		description: '前往地圖上的指定座標。用法：/navi mapname x y',
 		callback: function (text) {
 			const matches = text.match(/^navi\s+(\S+)\s+(\d+)\s+(\d+)/);
 			if (matches) {
@@ -876,7 +876,7 @@ const CommandStore = {
 		}
 	},
 	commands: {
-		description: 'Show available commands.',
+		description: '顯示可用的指令。',
 		callback: function () {
 			function addTextCommand(cmd, commands) {
 				let textAliases = '';
@@ -928,14 +928,14 @@ const CommandStore = {
 // Dev-only weather helper to trigger weather effects locally.
 if (Configs.get('development')) {
 	CommandStore.weather = {
-		description: 'Dev-only weather toggle. Usage: /weather snow|rain|leaves|sakura|fireworks|cloud|cloud2|off',
+		description: '僅供開發使用的天氣切換。用法：/weather snow|rain|leaves|sakura|fireworks|cloud|cloud2|off',
 		callback: function (text) {
 			const args = text.trim().split(/\s+/).slice(1);
 			const mode = (args[0] || '').toLowerCase();
 
 			if (!mode || mode === 'help') {
 				this.addText(
-					'Usage: /weather snow|rain|leaves|sakura|fireworks|cloud|cloud2|off',
+					'用法：/weather snow|rain|leaves|sakura|fireworks|cloud|cloud2|off',
 					this.TYPE.INFO,
 					this.FILTER.PUBLIC_LOG
 				);
@@ -953,7 +953,7 @@ if (Configs.get('development')) {
 					effectId: EffectConst.EF_SNOW,
 					ownerAID: ownerAID
 				});
-				this.addText('Snow started.', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
+				this.addText('開始降雪。', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 				return;
 			}
 
@@ -962,7 +962,7 @@ if (Configs.get('development')) {
 					effectId: EffectConst.EF_RAIN,
 					ownerAID: ownerAID
 				});
-				this.addText('Rain started.', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
+				this.addText('開始下雨。', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 				return;
 			}
 
@@ -971,7 +971,7 @@ if (Configs.get('development')) {
 					effectId: EffectConst.EF_SAKURA,
 					ownerAID: ownerAID
 				});
-				this.addText('Cherry tree leaves have begun to fall.', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
+				this.addText('櫻花樹葉開始飄落。', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 				return;
 			}
 
@@ -980,7 +980,7 @@ if (Configs.get('development')) {
 					effectId: EffectConst.EF_MAPLE,
 					ownerAID: ownerAID
 				});
-				this.addText('Fallen leaves fall.', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
+				this.addText('落葉飄落。', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 				return;
 			}
 
@@ -989,7 +989,7 @@ if (Configs.get('development')) {
 					effectId: EffectConst.EF_POKJUK,
 					ownerAID: ownerAID
 				});
-				this.addText('Fireworks are launched.', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
+				this.addText('煙火已施放。', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 				return;
 			}
 
@@ -998,7 +998,7 @@ if (Configs.get('development')) {
 					effectId: EffectConst.EF_CLOUD,
 					ownerAID: ownerAID
 				});
-				this.addText('Clouds appear.', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
+				this.addText('雲朵出現。', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 				return;
 			}
 
@@ -1007,7 +1007,7 @@ if (Configs.get('development')) {
 					effectId: EffectConst.EF_CLOUD2,
 					ownerAID: ownerAID
 				});
-				this.addText('Alternative clouds appear.', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
+				this.addText('另一種雲朵出現。', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 				return;
 			}
 
@@ -1018,12 +1018,12 @@ if (Configs.get('development')) {
 				PokJukWeatherEffect.stop(ownerAID, Renderer.tick);
 				CloudWeatherEffect.stop(ownerAID, Renderer.tick);
 
-				this.addText('Weather stopping.', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
+				this.addText('天氣效果停止。', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 				return;
 			}
 
 			this.addText(
-				'Unknown weather. Usage: /weather snow|rain|leaves|sakura|fireworks|cloud|cloud2|off',
+				'未知的天氣。用法：/weather snow|rain|leaves|sakura|fireworks|cloud|cloud2|off',
 				this.TYPE.INFO,
 				this.FILTER.PUBLIC_LOG
 			);
@@ -1034,13 +1034,13 @@ if (Configs.get('development')) {
 // Performance probe readout, when the configuration switches the probe on (Core/PerfProbe.js)
 if (Configs.get('perfProbe')) {
 	CommandStore.perf = {
-		description: 'Performance probe. Usage: /perf [reset|slow|overlay on|off]',
+		description: '效能監測。用法：/perf [reset|slow|overlay on|off]',
 		callback: function (text) {
 			const args = text.trim().split(/\s+/).slice(1);
 			const mode = (args[0] || '').toLowerCase();
 
 			if (!PerfProbe.enabled) {
-				this.addText('The performance probe is not running.', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
+				this.addText('效能監測未在執行。', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 				return;
 			}
 
@@ -1048,8 +1048,8 @@ if (Configs.get('perfProbe')) {
 				const stats = PerfProbe.stats();
 				console.log('[PerfProbe] stats', stats);
 				this.addText(
-					`${stats.fps} fps over ${stats.drawingSeconds} s of drawing: frame p50 ${stats.frameMs.p50} / p99 ${stats.frameMs.p99} ms, ` +
-						`work ${stats.workMs.avg} ms, ${stats.drawCalls.avg} draws, ${stats.hitches} hitches`,
+					`${stats.fps} fps（繪製 ${stats.drawingSeconds} 秒）：畫面 p50 ${stats.frameMs.p50} / p99 ${stats.frameMs.p99} ms， ` +
+						`處理 ${stats.workMs.avg} ms，${stats.drawCalls.avg} 次繪製，${stats.hitches} 次卡頓`,
 					this.TYPE.INFO,
 					this.FILTER.PUBLIC_LOG
 				);
@@ -1058,7 +1058,7 @@ if (Configs.get('perfProbe')) {
 
 			if (mode === 'reset') {
 				PerfProbe.reset();
-				this.addText('Performance probe reset.', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
+				this.addText('效能監測已重置。', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 				return;
 			}
 
@@ -1069,7 +1069,7 @@ if (Configs.get('perfProbe')) {
 				this.addText(
 					total > slow.length
 						? `${total} frames over 33 ms since the last reset; the first ${slow.length} are listed.`
-						: `${slow.length} frames over 33 ms since the last reset.`,
+						: `${slow.length} 個畫面超過 33 ms（自上次重置後）。`,
 					this.TYPE.INFO,
 					this.FILTER.PUBLIC_LOG
 				);
@@ -1081,7 +1081,7 @@ if (Configs.get('perfProbe')) {
 				return;
 			}
 
-			this.addText('Usage: /perf [reset|slow|overlay on|off]', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
+			this.addText('用法：/perf [reset|slow|overlay on|off]', this.TYPE.INFO, this.FILTER.PUBLIC_LOG);
 		}
 	};
 }

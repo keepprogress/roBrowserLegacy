@@ -255,7 +255,7 @@ PetInformations.setInformations = function setInformations(info) {
 				const option = document.createElement('option');
 				option.className = 'evolution-option';
 				option.value = `evolution_${info.job}`;
-				option.textContent = `Evolution - ${evoName}`;
+				option.textContent = `進化 - ${evoName}`;
 
 				cmdSelect.appendChild(option);
 			}

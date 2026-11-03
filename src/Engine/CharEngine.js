@@ -826,7 +826,7 @@ function onReceiveMapInfo(pkt) {
 		}
 		retryCount++;
 		if (retryCount > 600) {
-			UIManager.showMessageBox('Failed loading databases, please restart the game', 'ok', () => {
+			UIManager.showMessageBox('載入資料庫失敗，請重新啟動遊戲', 'ok', () => {
 				CharEngine.reload();
 			});
 			retryCount = 0;

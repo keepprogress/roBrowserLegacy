@@ -953,7 +953,7 @@ function renderItemList() {
 	if (!EnchantState.group) {
 		const empty = document.createElement('div');
 		empty.className = 'item_list_empty';
-		empty.textContent = 'Enchant data missing.';
+		empty.textContent = '缺少附魔資料。';
 		list.appendChild(empty);
 		return;
 	}
@@ -986,7 +986,7 @@ function renderItemList() {
 	if (!candidates.length) {
 		const empty = document.createElement('div');
 		empty.className = 'item_list_empty';
-		empty.textContent = 'No enchantable items.';
+		empty.textContent = '沒有可附魔的道具。';
 		list.appendChild(empty);
 		return;
 	}
@@ -1059,7 +1059,7 @@ function renderSlots() {
 	if (!empty) {
 		empty = document.createElement('div');
 		empty.className = 'slot_empty';
-		empty.textContent = 'Select an item';
+		empty.textContent = '請選擇道具';
 		list.appendChild(empty);
 	}
 	const hasItem = !!(EnchantState.item && EnchantState.group);
@@ -1296,7 +1296,7 @@ function refreshActionContent() {
 					if (upgradeSelect) {
 						const option = document.createElement('option');
 						option.value = candidate.slotNum;
-						option.textContent = `Slot ${candidate.slotNum + 1}: ${currentName} -> ${resultName}`;
+						option.textContent = `插槽 ${candidate.slotNum + 1}：${currentName} -> ${resultName}`;
 						upgradeSelect.appendChild(option);
 					}
 					upgradeEntries.push({
@@ -1365,33 +1365,33 @@ function refreshUI() {
 
 function validateItem(item) {
 	if (!EnchantState.group) {
-		return { ok: false, message: 'Enchant data missing for this group.' };
+		return { ok: false, message: '此群組缺少附魔資料。' };
 	}
 	if (!item) {
-		return { ok: false, message: 'Invalid item.' };
+		return { ok: false, message: '無效的道具。' };
 	}
 	if (item.WearState) {
-		return { ok: false, message: 'Item must be in inventory.' };
+		return { ok: false, message: '道具必須在物品欄中。' };
 	}
 	if ((item.equipSwitch && item.equipSwitch > 0) || (item.EquipSwitch && item.EquipSwitch > 0)) {
-		return { ok: false, message: 'Item cannot be in equipment switch.' };
+		return { ok: false, message: '道具不能在裝備切換中。' };
 	}
 	if (item.attribute && item.attribute !== 0) {
-		return { ok: false, message: 'Item attribute must be normal.' };
+		return { ok: false, message: '道具狀態必須為正常。' };
 	}
 	if (!isTargetItem(item, EnchantState.group)) {
-		return { ok: false, message: 'Item is not valid for this enchant group.' };
+		return { ok: false, message: '此道具不適用於此附魔群組。' };
 	}
 	const refine = item.RefiningLevel || item.refiningLevel || 0;
 	if (refine < EnchantState.group.condition.minRefine) {
-		return { ok: false, message: 'Refine level too low.' };
+		return { ok: false, message: '精煉等級過低。' };
 	}
 	const grade = getItemGrade(item);
 	if (grade < EnchantState.group.condition.minGrade) {
-		return { ok: false, message: 'Enchant grade too low.' };
+		return { ok: false, message: '附魔等級過低。' };
 	}
 	if (!EnchantState.group.allowRandomOption && hasRandomOptions(item)) {
-		return { ok: false, message: 'Random options not allowed.' };
+		return { ok: false, message: '不允許隨機選項。' };
 	}
 	return { ok: true };
 }
@@ -1563,7 +1563,7 @@ function onRequestAction() {
 		return;
 	}
 	if (!EnchantState.group || !EnchantState.item) {
-		setStatus('Select an item first.', true);
+		setStatus('請先選擇道具。', true);
 		return;
 	}
 	let pkt;
@@ -1572,7 +1572,7 @@ function onRequestAction() {
 
 	if (EnchantState.action === 'random') {
 		if (slotNum === null) {
-			setStatus('No available enchant slot.', true);
+			setStatus('沒有可用的附魔插槽。', true);
 			return;
 		}
 		pkt = new PACKET.CZ.REQUEST_RANDOM_ENCHANT();
@@ -1580,14 +1580,14 @@ function onRequestAction() {
 		pkt.index = itemIndex;
 	} else if (EnchantState.action === 'perfect') {
 		if (slotNum === null || !EnchantState.selectedPerfect) {
-			setStatus('Select a perfect enchant.', true);
+			setStatus('請選擇指定附魔。', true);
 			return;
 		}
 		const slotData = EnchantState.group.slots[slotNum];
 		const perfectEntry = slotData ? slotData.perfect[EnchantState.selectedPerfect] : null;
 		const perfectId = perfectEntry ? perfectEntry.id || DB.getItemIdfromBase(perfectEntry.base) : 0;
 		if (!perfectEntry || !perfectId) {
-			setStatus('Invalid perfect enchant selection.', true);
+			setStatus('指定附魔的選擇無效。', true);
 			return;
 		}
 		pkt = new PACKET.CZ.REQUEST_PERFECT_ENCHANT();
@@ -1596,7 +1596,7 @@ function onRequestAction() {
 		pkt.ITID = perfectId;
 	} else if (EnchantState.action === 'upgrade') {
 		if (slotNum === null) {
-			setStatus('Select an upgrade slot.', true);
+			setStatus('請選擇升級插槽。', true);
 			return;
 		}
 		pkt = new PACKET.CZ.REQUEST_UPGRADE_ENCHANT();
@@ -1627,7 +1627,7 @@ function onRequestAction() {
 		btn.disabled = true;
 	});
 	Network.sendPacket(pkt);
-	setStatus('Request sent...', false);
+	setStatus('已送出請求...', false);
 }
 
 function applyEnchantResult(item, action, slotNum, itid) {
@@ -1671,7 +1671,7 @@ function onEnchantResult(pkt) {
 
 function onRequestClose() {
 	if (EnchantState.pendingLock) {
-		setStatus('Request in progress...', false);
+		setStatus('請求處理中...', false);
 		return;
 	}
 	if (PACKETVER.value >= 20211103) {
@@ -1953,7 +1953,7 @@ Enchant.onOpenEnchantUI = function onOpenEnchantUI(groupId) {
 	EnchantState.groupId = Number(groupId);
 	EnchantState.group = DB.getEnchantGroup(EnchantState.groupId);
 	if (!EnchantState.group) {
-		UIManager.showErrorBox('Enchant data missing for group ' + groupId + '.');
+		UIManager.showErrorBox('缺少附魔資料的群組 ' + groupId + '.');
 	}
 	Enchant.append();
 	Enchant.ui.show();

@@ -83,7 +83,7 @@ function onTradeRequestAnswer(pkt) {
 
 		case 3:
 			if ('level' in pkt && 'GID' in pkt) {
-				Trade.title += `  Lv${pkt.level} (${tradeGIDEncoding(pkt.GID)})`;
+				Trade.title += ` 等級${pkt.level}（${tradeGIDEncoding(pkt.GID)}）`;
 			}
 			Trade.append();
 			break;
