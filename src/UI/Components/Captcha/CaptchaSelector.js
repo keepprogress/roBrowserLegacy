@@ -15,7 +15,7 @@ import Renderer from 'Renderer/Renderer.js';
 import EntityManager from 'Renderer/EntityManager.js';
 import Session from 'Engine/SessionStorage.js';
 import DB from 'DB/DBManager.js';
-import MonsterTable from 'DB/Monsters/MonsterTable.js';
+import MonsterTable from 'DB/Monsters/JobNameTable.js'; // job display names in Chinese
 import 'UI/Elements/Elements.js';
 import htmlText from './CaptchaSelector.html?raw';
 import cssText from './CaptchaSelector.css?raw';

@@ -10,7 +10,7 @@
 import DB from 'DB/DBManager.js';
 import ChatBox from 'UI/Components/ChatBox/ChatBox.js';
 import Session from 'Engine/SessionStorage.js';
-import MonsterTable from 'DB/Monsters/MonsterTable.js';
+import MonsterTable from 'DB/Monsters/JobNameTable.js'; // job display names in Chinese
 import Preferences from 'Core/Preferences.js';
 import Renderer from 'Renderer/Renderer.js';
 import ItemInfo from 'UI/Components/ItemInfo/ItemInfo.js';

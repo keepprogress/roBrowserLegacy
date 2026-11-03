@@ -26,7 +26,7 @@ import Camera from 'Renderer/Camera.js';
 import MiniMap from 'UI/Components/MiniMap/MiniMap.js';
 import Preferences from 'Core/Preferences.js';
 import UIPreferences from 'Preferences/UI.js';
-import MonsterTable from 'DB/Monsters/MonsterTable.js';
+import MonsterTable from 'DB/Monsters/JobNameTable.js'; // job display names in Chinese
 import Client from 'Core/Client.js';
 import Renderer from 'Renderer/Renderer.js';
 import Session from 'Engine/SessionStorage.js';

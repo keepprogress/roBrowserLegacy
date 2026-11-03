@@ -5576,13 +5576,14 @@ function loadItemInfo(filename, callback, onEnd) {
 				// this is necessary because some servers has main function on itemInfo.lub and others load it from itemInfo_f.lub
 				// doing this way we avoid to have to load the other file
 				// on my tests dont care if the main() is on itemInfo.lub or itemInfo_f.lub the content is always the same
+				// 99Max 的 itemInfo_true 把已鑑定名稱欄位拼成 identifiedDiSPlayName
 				lua.doStringSync(`
 						function main_item()
 							_processedItems = _processedItems or {} 
 							for ItemID, DESC in pairs(tbl) do
 								if not _processedItems[ItemID] and #DESC.identifiedDescriptionName > 0 then
 									_processedItems[ItemID] = true 
-									result, msg = AddItem(ItemID, DESC.unidentifiedDisplayName, DESC.unidentifiedResourceName, DESC.identifiedDisplayName, DESC.identifiedResourceName, DESC.slotCount, DESC.ClassNum)
+									result, msg = AddItem(ItemID, DESC.unidentifiedDisplayName, DESC.unidentifiedResourceName, DESC.identifiedDisplayName or DESC.identifiedDiSPlayName, DESC.identifiedResourceName, DESC.slotCount, DESC.ClassNum)
 									if not result then
 										return false, msg
 									end
@@ -7520,8 +7521,27 @@ function loadLuaValue(file_path, variable_name, callback, onEnd) {
 				// Create and execute a wrapper Lua code to extract the variable
 				lua.doStringSync(
 					String.raw`
+							-- 雙位元組編碼（Big5、GBK）的第二個位元組可能是 0x5C，整個字元照抄才不會被拆成跳脫字元；
+							-- JSON 字串也不能有換行等控制字元。shortcut: UTF-8 字串裡緊接在中文後的 " 或 \ 會漏跳脫，有 UTF-8 的表再改
 							local function escape_str(str)
-								return str:gsub("\\", "\\\\"):gsub("\"", "\\\"")
+								local out, i = {}, 1
+								while i <= #str do
+									local c = str:byte(i)
+									if c >= 0x81 and c <= 0xFE then
+										out[#out + 1] = str:sub(i, i + 1)
+										i = i + 2
+									else
+										if c == 0x5C or c == 0x22 then
+											out[#out + 1] = "\\" .. string.char(c)
+										elseif c < 0x20 then
+											out[#out + 1] = string.format("\\u%04x", c)
+										else
+											out[#out + 1] = string.char(c)
+										end
+										i = i + 1
+									end
+								end
+								return table.concat(out)
 							end
 
 							local function to_json(value)

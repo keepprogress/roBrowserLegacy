@@ -11,7 +11,7 @@
 import DB from 'DB/DBManager.js';
 import SkillInfo from 'DB/Skills/SkillInfo.js';
 import KEYS from 'Controls/KeyEventHandler.js';
-import MonsterTable from 'DB/Monsters/MonsterTable.js';
+import MonsterTable from 'DB/Monsters/JobNameTable.js'; // job display names in Chinese
 import Session from 'Engine/SessionStorage.js';
 import Entity from 'Renderer/Entity/Entity.js';
 import SpriteRenderer from 'Renderer/SpriteRenderer.js';

@@ -53,6 +53,16 @@
 	position: relative;
 	z-index: 10;
 }
+/* Hover feedback, otherwise the slots do not look clickable */
+#CharSelectV4 .char_canvas canvas {
+	transition:
+		filter 0.15s,
+		transform 0.15s;
+}
+#CharSelectV4 .char_canvas:hover canvas {
+	filter: brightness(1.08) drop-shadow(0 0 6px rgba(80, 110, 220, 0.8));
+	transform: translateY(-2px);
+}
 #CharSelectV4 .char_canvas .name {
 	position: absolute;
 	bottom: 17px;

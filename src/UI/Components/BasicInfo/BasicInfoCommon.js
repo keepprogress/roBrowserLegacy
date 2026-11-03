@@ -15,7 +15,7 @@
 import DB from 'DB/DBManager.js';
 import Configs from 'Core/Configs.js';
 import PACKETVER from 'Network/PacketVerManager.js';
-import MonsterTable from 'DB/Monsters/MonsterTable.js';
+import MonsterTable from 'DB/Monsters/JobNameTable.js'; // job display names in Chinese
 import Client from 'Core/Client.js';
 import Preferences from 'Core/Preferences.js';
 import Renderer from 'Renderer/Renderer.js';

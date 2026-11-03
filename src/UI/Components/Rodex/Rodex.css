@@ -122,6 +122,7 @@
 }
 #Rodex .body .searchbar .search-text {
 	color: #212163;
+	white-space: nowrap; /* 標籤寬 10px，中文會逐字換行 */
 }
 #Rodex .body .searchbar .search {
 	position: absolute;

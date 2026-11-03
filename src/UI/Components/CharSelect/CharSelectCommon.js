@@ -18,7 +18,7 @@
  */
 
 import DB from 'DB/DBManager.js';
-import MonsterTable from 'DB/Monsters/MonsterTable.js';
+import MonsterTable from 'DB/Monsters/JobNameTable.js'; // job display names in Chinese
 import Preferences from 'Core/Preferences.js';
 import Client from 'Core/Client.js';
 import KEYS from 'Controls/KeyEventHandler.js';
@@ -638,6 +638,10 @@ export function createCharSelect(config) {
 		return event => {
 			if (gridLayout) {
 				moveCursorTo(value);
+				// Empty slots have no selection highlight, so one click already opens creation
+				if (_index === value && !_slots[value]) {
+					create();
+				}
 			} else {
 				moveCursorTo(Math.floor(_index / 3) * 3 + value);
 			}

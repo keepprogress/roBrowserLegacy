@@ -159,6 +159,11 @@ function normalizeMapName(mapName) {
 	return mapName;
 }
 
+// 地圖代號換成 mapnametable 的名稱，查不到就照舊顯示代號
+function mapLabel(mapName) {
+	return DB.getMapName(mapName + '.rsw', mapName);
+}
+
 /**
  * Format coordinates with consistent styling
  */
@@ -183,7 +188,7 @@ function formatTargetCoordinates(x, y, options) {
 	if (options.noPathFound) {
 		text += ' (no path found)';
 	} else if (options.targetMap && options.targetMap !== getCurrentMap()) {
-		text += ` (${options.targetMap})`;
+		text += ` (${mapLabel(options.targetMap)})`;
 	}
 
 	return text;
@@ -196,9 +201,9 @@ function formatLocationTitle(currentMap, targetMap, displayName) {
 	let text;
 
 	if (!displayName && targetMap && currentMap !== targetMap) {
-		text = `[${currentMap} → ${targetMap}]`;
+		text = `[${mapLabel(currentMap)} → ${mapLabel(targetMap)}]`;
 	} else {
-		text = `[${displayName || currentMap}]`;
+		text = `[${displayName || mapLabel(currentMap)}]`;
 	}
 
 	return text;
@@ -519,7 +524,7 @@ Navigation.displaySearchResults = function displaySearchResults(results) {
 		resultItem.innerHTML =
 			`<span class="result-type ${typeIcon}">${result.type}</span>` +
 			`<span class="result-name">${result.name}</span>` +
-			`<span class="result-map">${result.mapName}</span>`;
+			`<span class="result-map">${mapLabel(result.mapName)}</span>`;
 
 		// Store result data
 		resultItem._resultData = result;
@@ -1092,7 +1097,7 @@ Navigation.setMapNameText = function setMapNameText(mapName) {
 
 	const mapNameEl = root.querySelector('.map-name');
 	if (mapNameEl) {
-		mapNameEl.textContent = normalizeMapName(mapName);
+		mapNameEl.textContent = mapLabel(normalizeMapName(mapName));
 	}
 };
 
