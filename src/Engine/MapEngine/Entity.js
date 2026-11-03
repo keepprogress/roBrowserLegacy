@@ -3012,6 +3012,7 @@ export default function EntityEngine() {
 	Network.hookPacket(PACKET.ZC.CHANGE_DIRECTION, onEntityDirectionChange);
 	Network.hookPacket(PACKET.ZC.SPRITE_CHANGE, onEntityViewChange);
 	Network.hookPacket(PACKET.ZC.SPRITE_CHANGE2, onEntityViewChange);
+	Network.hookPacket(PACKET.ZC.COSTUME_SPRITE_CHANGE, onEntityViewChange);
 	Network.hookPacket(PACKET.ZC.NPCSPRITE_CHANGE, onNPCViewChange);
 	Network.hookPacket(PACKET.ZC.USE_SKILL, onEntityUseSkill);
 	Network.hookPacket(PACKET.ZC.USE_SKILL2, onEntityUseSkill);
