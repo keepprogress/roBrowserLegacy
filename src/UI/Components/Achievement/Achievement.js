@@ -552,7 +552,7 @@ class AchievementComponent extends GUIComponent {
 		const overlay = root.querySelector('.js-overlay');
 
 		if (!info) {
-			root.querySelector('.js-d-title').textContent = 'Select an achievement';
+			root.querySelector('.js-d-title').textContent = '請選擇成就';
 			root.querySelector('.js-d-desc').textContent = '';
 			root.querySelector('.js-d-goals').innerHTML = '';
 			root.querySelector('.js-d-claim').style.display = 'none';
@@ -563,7 +563,7 @@ class AchievementComponent extends GUIComponent {
 			return;
 		}
 
-		root.querySelector('.js-d-title').textContent = info.title || 'Unknown';
+		root.querySelector('.js-d-title').textContent = info.title || '未知';
 		root.querySelector('.js-d-desc').textContent = info.content && info.content.details ? info.content.details : '';
 		const dStamp = root.querySelector('.d-stamp');
 		// if completed display stamp on right side else empty

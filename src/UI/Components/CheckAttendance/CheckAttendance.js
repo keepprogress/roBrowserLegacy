@@ -88,7 +88,7 @@ CheckAttendance.onAppend = function onAppend() {
 		CheckAttendance.updateUI();
 		this.focus();
 	} else {
-		ChatBox.addText('Currently there is no attendance check event.', ChatBox.TYPE.ERROR | ChatBox.TYPE.SELF);
+		ChatBox.addText('目前並非打卡活動期間。', ChatBox.TYPE.ERROR | ChatBox.TYPE.SELF);
 	}
 };
 
@@ -190,7 +190,7 @@ CheckAttendance.updateUI = function updateUI() {
 				`<span class="name">${item.identifiedDisplayName}</span>` +
 				`<div class="${checked}" data-background="check_attendance/${slot_complete_string}.tga"></div>` +
 				'</div>' +
-				`<div class="day">${day} Day</div>` +
+				`<div class="day">第 ${day} 天</div>` +
 				'</li>';
 			if (daysList) {
 				daysList.insertAdjacentHTML('beforeend', item_slot);

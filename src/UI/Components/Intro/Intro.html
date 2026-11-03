@@ -21,7 +21,7 @@
 					<span class="emblem-icon">&#x2694;&#xFE0F;</span>
 				</div>
 				<h1 class="about-title">roBrowserLegacy</h1>
-				<h2 class="about-subtitle">Open Source Ragnarok Online Web Client</h2>
+				<h2 class="about-subtitle">開放原始碼的 Ragnarok Online 網頁用戶端</h2>
 				<div class="ornament">
 					<div class="ornament-line"></div>
 					<div class="ornament-dot"></div>
@@ -31,15 +31,15 @@
 				</div>
 				<table class="info">
 					<tr>
-						<td>Author:</td>
+						<td>作者:</td>
 						<td>Vincent Thibault</td>
 					</tr>
 					<tr>
-						<td>Site:</td>
+						<td>網站:</td>
 						<td><a href="http://www.robrowser.com/" target="_blank">robrowser.com</a></td>
 					</tr>
 					<tr>
-						<td>Source:</td>
+						<td>原始碼:</td>
 						<td>
 							<a href="https://github.com/MrAntares/roBrowserLegacy" target="_blank"
 								>github.com/MrAntares/roBrowserLegacy</a
@@ -49,28 +49,26 @@
 				</table>
 				<div class="concept">
 					<p>
-						roBrowser is an open source project based on the game Ragnarok Online.<br />It's not affiliated
-						in any way with Gravity.
+						roBrowser 是一個基於 Ragnarok Online 遊戲的開放原始碼專案。<br />本專案與 Gravity 沒有任何關聯。
 					</p>
 					<p>
-						The concept is to reproduce the game using web technologies (HTML5, Javascript, WebGL) to bring
-						it to Web Browsers.
+						本專案的理念是運用網頁技術（HTML5、Javascript、WebGL）重現遊戲，讓它能在網頁瀏覽器中運行。
 					</p>
-					<p>Cross-platform: runs on Windows, Linux, macOS, and any device with WebGL support.</p>
+					<p>跨平台：可在 Windows、Linux、macOS 以及任何支援 WebGL 的裝置上執行。</p>
 				</div>
-				<p class="about-hint">Click anywhere to close</p>
+				<p class="about-hint">點擊任意處即可關閉</p>
 			</div>
 		</div>
 
 		<!-- Settings overlay -->
 		<div class="overlay settings" style="display: none">
 			<div class="settings-content">
-				<h1 class="settings-title">&#x2699; Settings</h1>
+				<h1 class="settings-title">&#x2699; 設定</h1>
 
-				<div class="section-header"><span>Window</span></div>
+				<div class="section-header"><span>視窗</span></div>
 				<table class="screen">
 					<tr class="resolution">
-						<td>Screen Resolution</td>
+						<td>畫面解析度</td>
 						<td colspan="2">
 							<select class="screensize">
 								<option value="640x480">640 x 480</option>
@@ -79,34 +77,34 @@
 								<option value="1280x800">1280 x 800</option>
 								<option value="1400x900">1400 x 900</option>
 								<option value="1680x1050">1680 x 1050</option>
-								<option value="full">Full Screen</option>
+								<option value="full">全螢幕</option>
 							</select>
 						</td>
 					</tr>
 					<tr>
-						<td>Resolution Details</td>
+						<td>解析度詳細資訊</td>
 						<td><input class="quality" type="range" value="100" max="100" min="25" step="25" /></td>
 						<td class="quality_result">100%</td>
 					</tr>
 					<tr>
-						<td>Cursor</td>
+						<td>滑鼠游標</td>
 						<td>
-							<label><input class="cursor" type="checkbox" /> Show official cursor</label>
+							<label><input class="cursor" type="checkbox" /> 顯示官方滑鼠游標</label>
 						</td>
 					</tr>
 				</table>
 
-				<div class="section-header"><span>Full Client</span></div>
+				<div class="section-header"><span>完整客戶端</span></div>
 				<table class="screen">
 					<tr>
 						<td>
-							<label><input class="save" type="checkbox" /> Save Files</label>
+							<label><input class="save" type="checkbox" /> 儲存檔案</label>
 						</td>
-						<td><button class="clean">Clean cache</button> <span class="clean-status"></span></td>
+						<td><button class="clean">清除快取</button> <span class="clean-status"></span></td>
 					</tr>
 				</table>
 
-				<div class="section-header"><span>Sound</span></div>
+				<div class="section-header"><span>音效</span></div>
 				<table class="sound">
 					<tr>
 						<td>BGM</td>
@@ -114,47 +112,47 @@
 						<td class="bgmvol_result">50%</td>
 					</tr>
 					<tr>
-						<td>Sound</td>
+						<td>音效</td>
 						<td><input class="soundvol" type="range" value="50" max="100" min="0" step="25" /></td>
 						<td class="soundvol_result">50%</td>
 					</tr>
 				</table>
 
 				<div class="serveredit">
-					<div class="section-header"><span>Server List</span></div>
+					<div class="section-header"><span>伺服器列表</span></div>
 					<dl>
 						<dt>
 							<input class="radio serverdef" type="radio" value="serverfile" name="server" />
-							<span>Using clientinfo.xml file stored in my FullClient</span>
+							<span>使用完整客戶端中儲存的 clientinfo.xml 檔案</span>
 						</dt>
 						<dd>data / <input type="text" value="clientinfo.xml" class="clientinfo" /></dd>
 						<dt>
 							<input class="radio serverdef" type="radio" value="serverlist" name="server" />
-							<span>Using servers from the current list:</span>
+							<span>使用目前列表中的伺服器:</span>
 						</dt>
 						<dd>
 							<div class="servercontainer">
 								<table class="serverlist">
 									<thead>
 										<tr>
-											<td width="22%">Name</td>
-											<td width="25%">Address</td>
-											<td width="12%">Version</td>
-											<td width="15%">Langtype</td>
-											<td width="22%">Packet Ver</td>
+											<td width="22%">名稱</td>
+											<td width="25%">位址</td>
+											<td width="12%">版本</td>
+											<td width="15%">語言類型</td>
+											<td width="22%">封包版本</td>
 											<td width="10px"></td>
 										</tr>
 									</thead>
 									<tbody class="servers"></tbody>
 								</table>
 							</div>
-							<button class="btn_add">+ Add Server</button>
+							<button class="btn_add">+ 新增伺服器</button>
 							<div class="clear"></div>
 						</dd>
 					</dl>
 				</div>
 
-				<button class="btn_save">SAVE SETTINGS</button>
+				<button class="btn_save">儲存設定</button>
 			</div>
 		</div>
 
@@ -163,11 +161,11 @@
 		<div class="ribbon"><span>UNOFFICIAL</span></div>
 		<div class="drop-zone">
 			<div class="drop-zone-icon">📂</div>
-			<div class="drop-zone-text"><strong>Drop GRF / data files here</strong><br />or click to browse</div>
+			<div class="drop-zone-text"><strong>將 GRF / data 檔案拖放至此</strong><br />或點擊瀏覽</div>
 		</div>
 		<div class="msg"></div>
 		<input type="file" multiple="multiple" directory="" webkitDirectory="" />
-		<button class="btn_play">START NOW</button>
+		<button class="btn_play">立即開始</button>
 		<button class="btn_settings">⚙</button>
 		<canvas width="800" height="600"></canvas>
 	</div>

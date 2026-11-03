@@ -1466,7 +1466,7 @@ function onEntityUseSkill(pkt) {
 
 		// Steal Coin zeny
 		if (pkt.SKID === SkillId.RG_STEALCOIN) {
-			ChatBox.addText('You got ' + pkt.level + ' zeny.', ChatBox.TYPE.BLUE, ChatBox.FILTER.ITEM);
+			ChatBox.addText('您獲得了 ' + pkt.level + ' zeny.', ChatBox.TYPE.BLUE, ChatBox.FILTER.ITEM);
 		}
 
 		if (pkt.SKID === SkillId.GC_ROLLINGCUTTER) {
@@ -2723,14 +2723,9 @@ function onNotifyExp(pkt) {
 			break;
 		case 1:
 			if (pkt.varID === 1) {
-				ChatBox.addText(
-					'Experience gained from Quest, Base:' + pkt.amount,
-					null,
-					ChatBox.FILTER.EXP,
-					'#A442DC'
-				);
+				ChatBox.addText('任務獲得的基本經驗值：' + pkt.amount, null, ChatBox.FILTER.EXP, '#A442DC');
 			} else if (pkt.varID === 2) {
-				ChatBox.addText('Experience gained from Quest, Job:' + pkt.amount, null, ChatBox.FILTER.EXP, '#A442DC');
+				ChatBox.addText('任務獲得的職業經驗值：' + pkt.amount, null, ChatBox.FILTER.EXP, '#A442DC');
 			}
 			break;
 	}
@@ -2753,7 +2748,7 @@ function onMarkMvp(pkt) {
 			}*/
 	}
 	if (pkt.infoType == 0) {
-		ChatBox.addText('Boss monster not found.', ChatBox.TYPE.ERROR, ChatBox.FILTER.PUBLIC_LOG);
+		ChatBox.addText('找不到 BOSS 怪物。', ChatBox.TYPE.ERROR, ChatBox.FILTER.PUBLIC_LOG);
 	}
 }
 

@@ -163,7 +163,7 @@ Intro.init = function init() {
 	root.querySelector('.clean').addEventListener('click', function () {
 		this.style.display = 'none';
 		const status = root.querySelector('.clean-status');
-		status.innerHTML = '<i>Cleaning cache...</i>';
+		status.innerHTML = '<i>正在清除快取...</i>';
 
 		FileSystem.cleanup(() => {
 			status.innerHTML = '';
@@ -270,11 +270,11 @@ Intro.onAppend = function onAppend() {
 		if (!used) return;
 		let msg = '';
 		if (used > 1024 * 1024 * 1024) {
-			msg = (used / 1024 / 1024 / 1024).toFixed(2) + ' GiB saved';
+			msg = (used / 1024 / 1024 / 1024).toFixed(2) + ' GiB 已儲存';
 		} else if (used > 1024 * 1024) {
-			msg = (used / 1024 / 1024).toFixed(2) + ' MiB saved';
+			msg = (used / 1024 / 1024).toFixed(2) + ' MiB 已儲存';
 		} else {
-			msg = (used / 1024).toFixed(2) + ' KiB saved';
+			msg = (used / 1024).toFixed(2) + ' KiB 已儲存';
 		}
 		const msgEl = root.querySelector('.msg');
 		if (msgEl) msgEl.textContent = msg;
@@ -409,7 +409,7 @@ function addFiles(files) {
 	if (!files.length) return;
 	Intro.files.push.apply(Intro.files, files);
 	const msgEl = querySelector('.msg');
-	if (msgEl) msgEl.textContent = Intro.files.length + ' files selected';
+	if (msgEl) msgEl.textContent = Intro.files.length + ' 個檔案已選取';
 }
 
 /**

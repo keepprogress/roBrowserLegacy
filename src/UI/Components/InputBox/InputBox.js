@@ -171,7 +171,7 @@ InputBox.setType = function setType(type, isPersistent, defaultVal, itemId = nul
 		case 'price':
 			innerRoot.classList.add('number');
 			if (textEl) {
-				textEl.textContent = 'Input Price';
+				textEl.textContent = '輸入價格';
 			}
 			if (input) {
 				input.type = 'text';
@@ -192,7 +192,7 @@ InputBox.setType = function setType(type, isPersistent, defaultVal, itemId = nul
 		case 'shopname':
 			innerRoot.classList.remove('number');
 			if (textEl) {
-				textEl.textContent = 'Input your Shop Name';
+				textEl.textContent = '輸入您的露天商店名稱';
 			}
 			if (input) {
 				input.type = 'text';

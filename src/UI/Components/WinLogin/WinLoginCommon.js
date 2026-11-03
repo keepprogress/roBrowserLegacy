@@ -79,7 +79,7 @@ export function createWinLogin({ name, htmlText, cssText }) {
 			this.value = ''; // reset so we can select same file again
 
 			if (!file.name || !file.name.toLowerCase().endsWith('.rrf')) {
-				UIManager.showMessageBox('Please select a Ragnarok replay file (.rrf).', 'ok');
+				UIManager.showMessageBox('請選擇 Ragnarok 重播檔案（.rrf）。', 'ok');
 				return;
 			}
 
@@ -176,7 +176,7 @@ export function createWinLogin({ name, htmlText, cssText }) {
 			replay.start();
 		} catch (err) {
 			console.error('[Replay] Error loading replay', err);
-			UIManager.showMessageBox(`Could not load the replay file.\n${err.message || err}`, 'ok');
+			UIManager.showMessageBox(`無法載入重播檔案。\n${err.message || err}`, 'ok');
 		}
 	}
 
@@ -194,7 +194,7 @@ export function createWinLogin({ name, htmlText, cssText }) {
 			);
 		} else {
 			UIManager.showPromptBox(
-				'No registration URL was provided.\nIf this server uses simplified registration, then input your new:\n - Username followed by _M for Male and _F for Female account (Eg: MyUser_M)\n - Password.',
+				'未提供註冊網址。\n若此伺服器使用簡化註冊，請輸入您的新資料：\n - 帳號名稱後加上 _M 表示男性帳號、_F 表示女性帳號（例：MyUser_M）\n - 密碼。',
 				'ok',
 				'cancel',
 				null,

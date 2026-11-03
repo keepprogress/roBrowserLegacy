@@ -592,7 +592,7 @@ function onClose() {
 				_onDisconnect();
 			} else {
 				import('UI/UIManager.js').then(UIManager => {
-					UIManager.default.showErrorBox('Disconnected from Server.');
+					UIManager.default.showErrorBox('與伺服器斷線。');
 				});
 			}
 		}

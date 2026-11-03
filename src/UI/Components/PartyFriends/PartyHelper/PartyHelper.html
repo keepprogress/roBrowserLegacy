@@ -7,10 +7,10 @@
 				bg="basic_interface/sys_base_off.bmp"
 				hover="basic_interface/sys_base_on.bmp"
 			></ui-button>
-			<span class="text setup"><ui-text msg="291">Party Setup</ui-text></span>
-			<span class="text friend-setup"><ui-text msg="355">Friend Setup</ui-text></span>
-			<span class="text create"><ui-text msg="2054">Create Party</ui-text></span>
-			<span class="text invite"><ui-text msg="2056">Create Party</ui-text></span>
+			<span class="text setup"><ui-text msg="291">隊伍設定</ui-text></span>
+			<span class="text friend-setup"><ui-text msg="355">好友設定</ui-text></span>
+			<span class="text create"><ui-text msg="2054">建立隊伍</ui-text></span>
+			<span class="text invite"><ui-text msg="2056">建立隊伍</ui-text></span>
 		</div>
 		<div class="right">
 			<ui-button
@@ -24,36 +24,36 @@
 	<div class="content party-content">
 		<div class="create invite">
 			<p>
-				<span class="create"><ui-text msg="2057">Party Name:</ui-text></span>
-				<span class="invite"><ui-text msg="2058">Player Name:</ui-text></span>
+				<span class="create"><ui-text msg="2057">隊伍名稱:</ui-text></span>
+				<span class="invite"><ui-text msg="2058">角色名稱:</ui-text></span>
 			</p>
 			<input type="text" class="name" value="" />
 		</div>
 		<div class="exp_share setup">
-			<p><ui-text msg="292">How to share EXP</ui-text></p>
+			<p><ui-text msg="292">經驗值分配方式</ui-text></p>
 			<button class="on" data-value="0">
-				<ui-image src="radiobtn_on.bmp"></ui-image><ui-text msg="287">Each Take</ui-text>
+				<ui-image src="radiobtn_on.bmp"></ui-image><ui-text msg="287">各自取得</ui-text>
 			</button>
 			<button class="off" data-value="1">
-				<ui-image src="radiobtn_off.bmp"></ui-image><ui-text msg="288">Even Share</ui-text>
+				<ui-image src="radiobtn_off.bmp"></ui-image><ui-text msg="288">均等分配</ui-text>
 			</button>
 		</div>
 		<div class="item_share setup create">
-			<p><ui-text msg="293">How to share Items</ui-text></p>
+			<p><ui-text msg="293">道具蒐集方式</ui-text></p>
 			<button class="on" data-value="0">
-				<ui-image src="radiobtn_on.bmp"></ui-image><ui-text msg="289">Each Take</ui-text>
+				<ui-image src="radiobtn_on.bmp"></ui-image><ui-text msg="289">各自取得</ui-text>
 			</button>
 			<button class="off" data-value="1">
-				<ui-image src="radiobtn_off.bmp"></ui-image><ui-text msg="290">Party Share</ui-text>
+				<ui-image src="radiobtn_off.bmp"></ui-image><ui-text msg="290">隊伍隊員全體共有</ui-text>
 			</button>
 		</div>
 		<div class="item_sharing_type setup create">
-			<p><ui-text msg="738">Item Sharing type</ui-text></p>
+			<p><ui-text msg="738">道具分配方式</ui-text></p>
 			<button class="on" data-value="0">
-				<ui-image src="radiobtn_on.bmp"></ui-image><ui-text msg="739">Individual</ui-text>
+				<ui-image src="radiobtn_on.bmp"></ui-image><ui-text msg="739">各自取得</ui-text>
 			</button>
 			<button class="off" data-value="1">
-				<ui-image src="radiobtn_off.bmp"></ui-image><ui-text msg="740">Shared</ui-text>
+				<ui-image src="radiobtn_off.bmp"></ui-image><ui-text msg="740">均等分配</ui-text>
 			</button>
 		</div>
 	</div>
@@ -62,17 +62,17 @@
 			<div class="open1to1Stranger setting-row">
 				<button class="on" data-value="1"><ui-image src="checkbox_1.bmp"></ui-image></button>
 				<button class="off" data-value="0"><ui-image src="checkbox_0.bmp"></ui-image></button>
-				<span><ui-text msg="361">Open 1:1 Chat between Strangers</ui-text></span>
+				<span><ui-text msg="361">非好友時開啟 1:1 對話</ui-text></span>
 			</div>
 			<div class="open1to1Friend setting-row">
 				<button class="on" data-value="1"><ui-image src="checkbox_1.bmp"></ui-image></button>
 				<button class="off" data-value="0"><ui-image src="checkbox_0.bmp"></ui-image></button>
-				<span><ui-text msg="359">Open 1:1 Chat between Friends</ui-text></span>
+				<span><ui-text msg="359">好友上線時自動開啟 1:1 對話</ui-text></span>
 			</div>
 			<div class="alarm1to1 setting-row">
 				<button class="on" data-value="1"><ui-image src="checkbox_1.bmp"></ui-image></button>
 				<button class="off" data-value="0"><ui-image src="checkbox_0.bmp"></ui-image></button>
-				<span><ui-text msg="362">Alarm when receive a 1:1 Chat</ui-text></span>
+				<span><ui-text msg="362">收到 1:1 對話時以警示音通知</ui-text></span>
 			</div>
 		</div>
 	</div>

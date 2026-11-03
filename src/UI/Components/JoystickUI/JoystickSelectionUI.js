@@ -148,7 +148,7 @@ function createTabButtons() {
 		const tabBtn = document.createElement('button');
 		tabBtn.className = 'tab-btn';
 		tabBtn.dataset.tab = t;
-		tabBtn.textContent = `Tab ${t + 1}`;
+		tabBtn.textContent = `分頁 ${t + 1}`;
 		tabButtons.appendChild(tabBtn);
 	}
 }

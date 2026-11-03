@@ -510,7 +510,7 @@ export function createPartyFriends(config) {
 			if (node) node.style.backgroundImage = '';
 			if (UIPreferences.li) {
 				ChatBox.addText(
-					DB.getMessage(1042, '%s has logged out.').replace('%s', _friends[index].Name),
+					DB.getMessage(1042, '%s 已下線。').replace('%s', _friends[index].Name),
 					ChatBox.TYPE.BLUE,
 					ChatBox.FILTER.PUBLIC_LOG
 				);
@@ -520,7 +520,7 @@ export function createPartyFriends(config) {
 
 		if (UIPreferences.li) {
 			ChatBox.addText(
-				DB.getMessage(1041, '%s has logged in.').replace('%s', _friends[index].Name),
+				DB.getMessage(1041, '%s 已上線。').replace('%s', _friends[index].Name),
 				ChatBox.TYPE.BLUE,
 				ChatBox.FILTER.PUBLIC_LOG
 			);

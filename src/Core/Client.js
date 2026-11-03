@@ -192,7 +192,7 @@ function savingFiles(files) {
 		};
 
 		// Progress text on hover 'Saving fullclient... (x%)'
-		info.textContent = 'Saving fullclient... (0.00 %)';
+		info.textContent = '正在儲存完整客戶端...（0.00 %）';
 		info.style.position = 'absolute';
 		info.style.left = '20px';
 		info.style.top = '0px';
@@ -217,7 +217,7 @@ function savingFiles(files) {
 			const now = Date.now();
 			if (last_tick + 400 < now) {
 				progressbar.style.width = data.total.perc + '%';
-				info.textContent = 'Saving fullclient... (' + data.total.perc + ' %)';
+				info.textContent = '正在儲存完整客戶端...（' + data.total.perc + ' %)';
 				last_tick = now;
 			}
 		});

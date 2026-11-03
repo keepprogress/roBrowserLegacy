@@ -449,7 +449,7 @@ class GuildEngine {
 	static requestPlayerInvitationByName(name) {
 		if (PACKETVER.value < 20120131) {
 			ChatBox.addText(
-				'Guild invite by name requires client 2012-01-31 or newer.',
+				'以名稱邀請公會需要 2012-01-31 或更新版本的客戶端。',
 				ChatBox.TYPE.ERROR,
 				ChatBox.FILTER.PUBLIC_LOG
 			);
@@ -541,7 +541,7 @@ class GuildEngine {
 		clearTimeout(_memberInfoTimer);
 		_memberInfoTimer = setTimeout(() => {
 			ChatBox.addText(
-				`${DB.getMessage(129, 'View Information')} : the server did not answer.`,
+				`${DB.getMessage(129, 'View Information')}：伺服器沒有回應。`,
 				ChatBox.TYPE.ERROR,
 				ChatBox.FILTER.GUILD
 			);
@@ -1002,15 +1002,15 @@ function onGuildCreationResult(pkt) {
 			break;
 
 		case 1: // You are already in a Guild.#
-			createFailed(DB.getMessage(375, 'You are already in a Guild.'));
+			createFailed(DB.getMessage(375, '您已是公會的一員。'));
 			break;
 
 		case 2: // That Guild Name already exists.
-			createFailed(DB.getMessage(376, 'That Guild Name already exists.'));
+			createFailed(DB.getMessage(376, '此公會名稱已有人使用。'));
 			break;
 
 		case 3: // You need the neccessary item to create a Guild.
-			createFailed(DB.getMessage(405, 'You need the necessary item to create a Guild.'));
+			createFailed(DB.getMessage(405, '您需要建立公會所需的道具。'));
 			break;
 	}
 }
@@ -1045,11 +1045,11 @@ function onGuildDestroy(pkt) {
 			break;
 
 		case 1: // invalid guild name
-			fail(DB.getMessage(401, 'You have failed to disband the guild.'));
+			fail(DB.getMessage(401, '公會解散失敗。'));
 			break;
 
 		case 2: // still members on the guild
-			fail(DB.getMessage(402, 'There are still members in the guild.'));
+			fail(DB.getMessage(402, '公會內仍有成員。'));
 			break;
 	}
 }
@@ -1088,7 +1088,7 @@ function onGuildInviteRequest(pkt) {
  */
 function addInviteResult(id, defaultText, type) {
 	// No-op on a string without one, which is every stock table.
-	const text = DB.getMessage(id, defaultText).replace('%s', _lastInvited || DB.getMessage(581, 'Nameless'));
+	const text = DB.getMessage(id, defaultText).replace('%s', _lastInvited || DB.getMessage(581, '無名氏'));
 
 	// The name answers one ack and is then spent. The server drops some invites
 	// without replying at all, so a name kept past its own answer would end up

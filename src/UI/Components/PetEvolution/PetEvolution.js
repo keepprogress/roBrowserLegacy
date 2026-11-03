@@ -192,7 +192,7 @@ PetEvolution.SetInfo = function SetInfo(baseJobID) {
 		// Create amount span
 		const amountSpan = document.createElement('span');
 		amountSpan.className = 'evo_item_amount';
-		amountSpan.textContent = ` - ${mat.Amount} ea`;
+		amountSpan.textContent = ` - ${mat.Amount} 個`;
 
 		// Append spans to row
 		row.appendChild(nameSpan);
