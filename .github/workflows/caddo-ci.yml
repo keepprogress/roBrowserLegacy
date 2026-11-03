@@ -34,6 +34,21 @@ jobs:
               with:
                   node-version: 24
 
+            # What upstream review asked of our changes, checked on every change.
+            # See the header of .github/caddo-checks/conventions.mjs.
+            - name: Fetch upstream
+              run: git fetch --no-tags https://github.com/MrAntares/roBrowserLegacy.git master:refs/remotes/upstream/master
+
+            - name: Test the convention checks
+              # Node 24 takes test files, not a directory
+              run: node --test .github/caddo-checks/conventions.test.mjs
+
+            - name: Conventions
+              env:
+                  # Deployment values that must never appear here, one regular expression per line
+                  CADDO_DENY_PATTERNS: ${{ secrets.CADDO_DENY_PATTERNS }}
+              run: node .github/caddo-checks/conventions.mjs
+
             # No lock file in the repo; upstream installs the same way
             - name: Install dependencies
               run: npm install
