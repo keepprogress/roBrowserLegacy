@@ -2,7 +2,7 @@
 
 The UI uses `GUIComponent`, Shadow DOM, native DOM APIs, and Custom Elements.
 
-- All 100 UI components use `GUIComponent`.
+- All 101 UI components use `GUIComponent`.
 - Versioned component siblings have been deduplicated into shared `*Common.js` factories across 13 multi-version component families.
 - The `this.ui` proxy on `GUIComponent` provides a minimal jQuery-compatible API for legacy interoperability. Internal component code must use native DOM and Shadow DOM APIs directly, such as `this.getRoot().querySelector(...)`.
 - UI appearance is primarily asset-driven. Window frames, buttons, and backgrounds use BMP assets from GRF files. CSS is structural and positional rather than the primary source of visual styling.
@@ -59,7 +59,7 @@ Before modifying or creating UI components, read the applicable reference guides
 
 ## Core UI Invariants
 
-1. **`GUIComponent` Only:** All 100 UI components use `GUIComponent` with Shadow DOM, native DOM, and Custom Elements. Never reintroduce the removed legacy `UIComponent` or jQuery DOM patterns.
+1. **`GUIComponent` Only:** All 101 UI components use `GUIComponent` with Shadow DOM, native DOM, and Custom Elements. Never reintroduce the removed legacy `UIComponent` or jQuery DOM patterns.
 2. **Registration:** `UIManager.addComponent()` requires a `GUIComponent` instance.
 3. **Shadow DOM Isolation:** Query internal nodes via `this.getRoot().querySelector(...)` or `ComponentName.getRoot().querySelector(...)`. Never use `document.querySelector()` for shadow content.
 4. **Native DOM Ownership:** The `this.ui` proxy on `GUIComponent` provides a minimal jQuery-compatible API for legacy external interop only; internal component code must use native DOM APIs directly.
@@ -95,7 +95,7 @@ Before modifying or creating UI components, read the applicable reference guides
 - **Crafting & Upgrade:** `Refine`, `RefineWeaponSelection`, `Enchant`, `EnchantGrade`, `ItemReform`, `LaphineSys`, `LaphineUpg`, `MakeArrowSelection`, `MakeItemSelection`, `MakeReadBook`.
 - **Skills & Combat:** `SkillList`, `SkillListMH`, `SkillDescription`, `SkillTargetSelection`, `ShortCut`, `ShortCuts`, `ShortCutOption`.
 - **Communication:** `ChatBox`, `ChatBoxSettings`, `ChatRoom`, `ChatRoomCreate`, `WhisperBox`, `Emoticons`, `Announce`.
-- **NPC, Quests & Commerce:** `NpcBox`, `NpcStore`, `NpcMenu`, `Quest`, `Trade`, `Vending`, `VendingShop`, `VendingReport`, `Mail`, `Rodex`, `RodexIcon`, `Roulette`, `SlotMachine`.
+- **NPC, Quests & Commerce:** `NpcBox`, `NpcStore`, `NpcMenu`, `Quest`, `Trade`, `Vending`, `VendingShop`, `VendingReport`, `Mail`, `Rodex`, `RodexIcon`, `Roulette`, `SlotMachine`, `Stylist`.
 - **Social & Companions:** `PartyFriends`, `Guild`, `Clan`, `EntityRoom`, `HomunInformations`, `MercenaryInformations`, `PetInformations`, `PetEvolution`.
 - **Navigation:** `MiniMap`, `WorldMap`, `Navigation`, `PrivateAirship` (payment window for the Navigation window's airship Move button), `MapName`.
 - **System, Settings & Overlays:** `GraphicsOption`, `SoundOption`, `FPS`, `Escape`, `Error`, `WinPopup`, `WinPrompt`, `Captcha`, `CheckAttendance`, `Reputation`, `PvPCount`, `PvPTimer`, `PCGoldTimer`, `ContextMenu`, `EntitySignboard`, `JoystickUI`, `MobileUI`.

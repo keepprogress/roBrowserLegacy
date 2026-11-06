@@ -13490,6 +13490,49 @@ PACKET.CZ.UI_OPEN.prototype.build = function () {
 	return pkt_buf;
 };
 
+// 0xa46 / 0xafc  造型師：送出選好的索引（不是 value）
+PACKET.CZ.REQ_STYLE_CHANGE2 = function PACKET_CZ_REQ_STYLE_CHANGE2() {
+	this.HeadPalette = 0;
+	this.HeadStyle = 0;
+	this.BodyPalette = 0;
+	this.TopAccessory = 0;
+	this.MidAccessory = 0;
+	this.BottomAccessory = 0;
+	this.BodyStyle = 0;
+};
+PACKET.CZ.REQ_STYLE_CHANGE2.prototype.build = function () {
+	// 0xafc（多 BodyStyle）從 2018-05-16 起；之前的客戶端用 0xa46
+	const v2 = PACKETVER.value >= 20180516;
+	const pkt_buf = new BinaryWriter(v2 ? 16 : 14);
+
+	pkt_buf.writeShort(v2 ? 0xafc : 0xa46);
+	pkt_buf.writeShort(this.HeadPalette);
+	pkt_buf.writeShort(this.HeadStyle);
+	pkt_buf.writeShort(this.BodyPalette);
+	pkt_buf.writeShort(this.TopAccessory);
+	pkt_buf.writeShort(this.MidAccessory);
+	pkt_buf.writeShort(this.BottomAccessory);
+	if (v2) {
+		pkt_buf.writeShort(this.BodyStyle);
+	}
+	return pkt_buf;
+};
+
+// 0xa47  造型師結果：0 = 成功，1 = 失敗
+PACKET.ZC.STYLE_CHANGE_RES = function PACKET_ZC_STYLE_CHANGE_RES(fp, end) {
+	this.flag = fp.readUChar();
+};
+PACKET.ZC.STYLE_CHANGE_RES.size = 3;
+
+// 0xa48  關閉造型師
+PACKET.CZ.REQ_STYLE_CLOSE = function PACKET_CZ_REQ_STYLE_CLOSE() {};
+PACKET.CZ.REQ_STYLE_CLOSE.prototype.build = function () {
+	const pkt_buf = new BinaryWriter(2);
+
+	pkt_buf.writeShort(0xa48);
+	return pkt_buf;
+};
+
 //0xae0
 PACKET.AC.REFUSE_LOGIN_USA = function PACKET_AC_REFUSE_LOGIN_USA(fp, end) {
 	this.ErrorCode = fp.readULong();
