@@ -571,3 +571,9 @@
 #CashShop .item-desc-top {
 	height: 20px;
 }
+
+/* caddo: the Taiwan client's charge/buy button art already has its label drawn in; hide the HTML text so it doesn't print over it */
+#CashShop .panel-cart .panel-cart-charging-view .panel-cart-charge-btn,
+#CashShop .panel-cart .panel-cart-footer .cart-footer-action button {
+	color: transparent;
+}
