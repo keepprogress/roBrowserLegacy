@@ -14,6 +14,7 @@ import PACKET from 'Network/PacketStructure.js';
 import Session from 'Engine/SessionStorage.js';
 import StylistTable from 'DB/Stylist/StylistTable.js';
 import GUIComponent from 'UI/GUIComponent.js';
+import UIManager from 'UI/UIManager.js';
 import ChatBox from 'UI/Components/ChatBox/ChatBox.js';
 import htmlText from './Stylist.html?raw';
 import cssText from './Stylist.css?raw';
@@ -87,13 +88,13 @@ function refresh() {
 
 	const lines = [];
 	if (zeny > 0) {
-		const short = Session.money < zeny;
+		const short = Session.zeny < zeny;
 		lines.push(
 			`<div${short ? ' class="short"' : ''}>費用：${zeny.toLocaleString()} Zeny${short ? '（Zeny 不足）' : ''}</div>`
 		);
 	}
 	items.forEach((v, id) => {
-		lines.push(`<div>需要：${itemName(id)} × ${v.count}${v.hasBox ? '（或對應禮盒）' : ''}</div>`);
+		lines.push(`<div>需要：${escapeHtml(itemName(id))} × ${v.count}${v.hasBox ? '（或對應禮盒）' : ''}</div>`);
 	});
 	root.querySelector('.cost').innerHTML = lines.length ? lines.join('') : chosen ? '免費' : '請用箭頭挑選想換的項目';
 	root.querySelector('.confirm').disabled = _busy || chosen === 0;
@@ -177,4 +178,8 @@ Network.hookPacket(PACKET.ZC.STYLE_CHANGE_RES, function onStyleChangeResult(pkt)
 	refresh();
 });
 
-export default Stylist;
+function escapeHtml(s) {
+	return String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]);
+}
+
+export default UIManager.addComponent(Stylist);

@@ -13501,16 +13501,20 @@ PACKET.CZ.REQ_STYLE_CHANGE2 = function PACKET_CZ_REQ_STYLE_CHANGE2() {
 	this.BodyStyle = 0;
 };
 PACKET.CZ.REQ_STYLE_CHANGE2.prototype.build = function () {
-	const pkt_buf = new BinaryWriter(16);
+	// 0xafc（多 BodyStyle）從 2018-05-16 起；之前的客戶端用 0xa46
+	const v2 = PACKETVER.value >= 20180516;
+	const pkt_buf = new BinaryWriter(v2 ? 16 : 14);
 
-	pkt_buf.writeShort(0xafc);
+	pkt_buf.writeShort(v2 ? 0xafc : 0xa46);
 	pkt_buf.writeShort(this.HeadPalette);
 	pkt_buf.writeShort(this.HeadStyle);
 	pkt_buf.writeShort(this.BodyPalette);
 	pkt_buf.writeShort(this.TopAccessory);
 	pkt_buf.writeShort(this.MidAccessory);
 	pkt_buf.writeShort(this.BottomAccessory);
-	pkt_buf.writeShort(this.BodyStyle);
+	if (v2) {
+		pkt_buf.writeShort(this.BodyStyle);
+	}
 	return pkt_buf;
 };
 
