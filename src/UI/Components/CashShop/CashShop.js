@@ -610,7 +610,7 @@ CashShop.renderCashShopItems = function renderCashShopItems(items) {
 							<span>${item.price}</span>
 						</div>
 						<div class="purchase-btn-container">
-							<button class="add-to-cart" data-itemid="${item.itemId}" tab-index="${i}" data-background="cashshop/btn_add_normal.bmp" data-down="cashshop/btn_add_press.bmp">Purchase</button>
+							<button class="add-to-cart" data-itemid="${item.itemId}" tab-index="${i}" data-background="cashshop/btn_add_normal.bmp" data-down="cashshop/btn_add_press.bmp">加入購物車</button>
 						</div>
 					</div>
 				</div>
