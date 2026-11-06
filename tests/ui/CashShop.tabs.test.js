@@ -43,7 +43,9 @@ vi.mock('Network/PacketStructure.js', () => ({
 	}
 }));
 vi.mock('Controls/KeyEventHandler.js', () => ({ default: {} }));
-vi.mock('UI/Components/InputBox/InputBox.js', () => ({ default: {} }));
+vi.mock('UI/Components/InputBox/InputBox.js', () => ({
+	default: { append: vi.fn(), setType: vi.fn(), remove: vi.fn() }
+}));
 vi.mock('UI/Components/ChatBox/ChatBox.js', () => ({
 	default: { addText: vi.fn(), TYPE: {}, FILTER: {} }
 }));
@@ -66,6 +68,8 @@ vi.mock('UI/UIManager.js', () => ({
 }));
 
 const { default: CashShop } = await import('UI/Components/CashShop/CashShop.js');
+const { default: InputBox } = await import('UI/Components/InputBox/InputBox.js');
+const { default: UIManager } = await import('UI/UIManager.js');
 
 const item = (itemId, price = 100) => ({ itemId, price });
 
@@ -135,5 +139,86 @@ describe('Cash Shop tabs', () => {
 		root.querySelector('.cashshop-search-btn').dispatchEvent(new MouseEvent('click', { bubbles: true }));
 
 		expect(shownItems()).toEqual([701]);
+	});
+});
+
+describe('Cash Shop cart limit', () => {
+	const cartAmounts = () => CashShop.cartItem.map(i => i.amount);
+
+	function dropOnCart(itemId, count) {
+		const event = new Event('drop', { bubbles: true });
+		event.dataTransfer = {
+			getData: () => JSON.stringify({ type: 'item', from: 'CashShop', data: { itemId } })
+		};
+		CashShop.getRoot().querySelector('.panel-cart-body').dispatchEvent(event);
+		InputBox.onSubmitRequest(count);
+	}
+
+	function buy() {
+		CashShop.getRoot()
+			.querySelector('#purchase-btn')
+			.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+		CashShop.setSuccessCashShopUpdate({ result: 0, cashPoints: 0, kafraPoints: 0 });
+	}
+
+	beforeEach(() => {
+		mocks.sent.length = 0;
+		UIManager.showMessageBox.mockClear();
+		CashShop.cashShopListItem = [];
+		CashShop.cartItem = [];
+		CashShop.activeCashMenu = 0;
+		CashShop.readCashShopItems({ tabNum: 2, count: 1, items: [item(501)] });
+		clickTab(2);
+	});
+
+	it('can buy 99 of an item again after buying 99', () => {
+		dropOnCart(501, 99);
+		buy();
+		expect(mocks.sent[0].item_list.map(i => i.amount)).toEqual([99]);
+		expect(CashShop.cartItem).toEqual([]);
+		UIManager.showMessageBox.mockClear();
+
+		clickPurchase(501);
+
+		expect(cartAmounts()).toEqual([1]);
+		expect(UIManager.showMessageBox).not.toHaveBeenCalled();
+	});
+
+	it('can add an item back after removing 99 of it', () => {
+		dropOnCart(501, 99);
+		CashShop.getRoot()
+			.querySelector('#cart-list .delete-item')
+			.dispatchEvent(new MouseEvent('click', { bubbles: true }));
+
+		clickPurchase(501);
+
+		expect(cartAmounts()).toEqual([1]);
+	});
+
+	it('leaves the listed item alone', () => {
+		clickPurchase(501);
+
+		expect(CashShop.cashShopListItem[2].items[0].amount).toBeUndefined();
+	});
+
+	it('stops at 99 in the cart', () => {
+		dropOnCart(501, 98);
+		clickPurchase(501);
+		expect(cartAmounts()).toEqual([99]);
+		expect(UIManager.showMessageBox).not.toHaveBeenCalled();
+
+		clickPurchase(501);
+
+		expect(cartAmounts()).toEqual([99]);
+		expect(UIManager.showMessageBox).toHaveBeenCalledOnce();
+	});
+
+	it('limits a dropped amount to what still fits', () => {
+		dropOnCart(501, 150);
+		expect(cartAmounts()).toEqual([99]);
+
+		CashShop.cartItem[0].amount = 90;
+		dropOnCart(501, 20);
+		expect(cartAmounts()).toEqual([99]);
 	});
 });

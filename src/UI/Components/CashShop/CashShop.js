@@ -892,6 +892,11 @@ function addItemToCart(itemId, amount = 1) {
 		return;
 	}
 
+	// The cart keeps its own copy: an amount left on the listed item would block buying it again
+	const inCart = itemCart ? itemCart.amount : 0;
+	item = { ...item, amount: inCart };
+	amount = Math.min(amount, 99 - inCart);
+
 	const noItems = cartContainer ? cartContainer.querySelector('#cart-list .items .no-items') : null;
 	if (noItems) {
 		noItems.remove();
