@@ -1,0 +1,90 @@
+:host {
+	width: 260px;
+}
+
+#Stylist {
+	width: 100%;
+	background: #f4f0e6;
+	border: 1px solid #8a7b5a;
+	border-radius: 4px;
+	font-size: 12px;
+	color: #333;
+	user-select: none;
+}
+
+#Stylist .titlebar {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	height: 22px;
+	padding: 0 6px;
+	background: #6b5d3f;
+	color: #fff;
+	border-radius: 3px 3px 0 0;
+	cursor: move;
+}
+
+#Stylist .close-btn {
+	background: none;
+	border: none;
+	color: #fff;
+	font-size: 16px;
+	line-height: 1;
+	cursor: pointer;
+}
+
+#Stylist .body {
+	padding: 10px;
+}
+
+#Stylist .row {
+	display: flex;
+	align-items: center;
+	margin-bottom: 8px;
+}
+
+#Stylist .label {
+	width: 70px;
+}
+
+#Stylist .value {
+	flex: 1;
+	text-align: center;
+}
+
+#Stylist button {
+	cursor: pointer;
+}
+
+#Stylist .row button {
+	width: 24px;
+	height: 22px;
+}
+
+#Stylist .cost {
+	min-height: 48px;
+	margin: 4px 0 10px;
+	padding: 6px;
+	background: #fff;
+	border: 1px solid #cfc6ad;
+	line-height: 1.6;
+}
+
+#Stylist .cost .short {
+	color: #c0392b;
+}
+
+#Stylist .buttons {
+	display: flex;
+	gap: 8px;
+	justify-content: flex-end;
+}
+
+#Stylist .buttons button {
+	padding: 3px 12px;
+}
+
+#Stylist .buttons button:disabled {
+	opacity: 0.5;
+	cursor: default;
+}

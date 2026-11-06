@@ -18,6 +18,7 @@ import PACKETVER from 'Network/PacketVerManager.js';
 import CheckAttendance from 'UI/Components/CheckAttendance/CheckAttendance.js';
 import EnchantGradeUI from 'UI/Components/EnchantGrade/EnchantGrade.js';
 import EnchantUI from 'UI/Components/Enchant/Enchant.js';
+import Stylist from 'UI/Components/Stylist/Stylist.js';
 
 /**
  * Received data and request to open a specific UI
@@ -29,7 +30,7 @@ function onUIOpen(pkt) {
 	// 0AE2 <type>.B <data>.L
 	// type:
 	//    0 = BANK_UI
-	//    1 = STYLIST_UI
+	//    1 = STYLIST_UI（Stylist.js）
 	//    2 = CAPTCHA_UI
 	//    3 = MACRO_UI
 	//    4 = UI_UNUSED
@@ -41,6 +42,11 @@ function onUIOpen(pkt) {
 	//    10 = ENCHANT_UI
 
 	switch (pkt.ui_type) {
+		case 1:
+			if (PACKETVER.value >= 20151104) {
+				Stylist.open();
+			}
+			break;
 		case 7:
 			if (Configs.get('enableCheckAttendance') && PACKETVER.value >= 20180307) {
 				CheckAttendance.prepare();
