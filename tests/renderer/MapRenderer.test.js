@@ -481,13 +481,17 @@ describe('MapRenderer.onContextRestored', () => {
 		expect(mocks.renderer.render).not.toHaveBeenCalled();
 	});
 
-	it('does nothing after the map was freed (logout, character select)', () => {
+	it('does not reload after the map was freed (logout, character select), but forgets the dead GPU objects', () => {
 		MapRenderer.free();
 		vi.clearAllMocks();
 
 		MapRenderer.onContextRestored();
 
 		expect(mocks.thread.send).not.toHaveBeenCalled();
+		expect(mocks.renderer.stop).not.toHaveBeenCalled();
+		expect(mocks.mapParts.Ground.contextRestored).toHaveBeenCalledOnce();
+		expect(mocks.spriteRenderer.contextRestored).toHaveBeenCalledOnce();
+		expect(mocks.screenEffects.contextRestored).toHaveBeenCalledOnce();
 	});
 
 	it('drops a reload still pending when the map is freed', () => {

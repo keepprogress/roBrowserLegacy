@@ -318,7 +318,14 @@ class MapRenderer {
 	 */
 	static onContextRestored() {
 		// shortcut: a map still loading keeps its dead objects until the next map change (F5 fixes it)
-		if (this.loading || !this._inGame) {
+		if (this.loading) {
+			return;
+		}
+
+		// No map (login, character select): nothing to reload, but the modules must not keep
+		// their dead programs for the next map (Ground.init keeps a program it already has)
+		if (!this._inGame) {
+			forgetDeadGpuObjects();
 			return;
 		}
 
@@ -343,12 +350,7 @@ class MapRenderer {
 		EffectManager.free(gl);
 
 		// These keep their GPU data from one map to the next
-		ScreenEffectManager.contextRestored();
-		Ground.contextRestored();
-		AnimatedModels.contextRestored();
-		SpriteRenderer.contextRestored();
-		Damage.contextRestored();
-		Sky.contextRestored();
+		forgetDeadGpuObjects();
 
 		Thread.hook('MAP_PROGRESS', () => {});
 		Thread.hook('MAP_WORLD', loadEvent(onWorldComplete));
@@ -682,6 +684,18 @@ function registerPostProcessModules(gl) {
 
 	// Final Pass GPU Upsampling for Performance Mode
 	PostProcess.register(Upsampling, gl);
+}
+
+/**
+ * Modules that keep GPU objects from one map to the next: drop the ones of the lost context
+ */
+function forgetDeadGpuObjects() {
+	ScreenEffectManager.contextRestored();
+	Ground.contextRestored();
+	AnimatedModels.contextRestored();
+	SpriteRenderer.contextRestored();
+	Damage.contextRestored();
+	Sky.contextRestored();
 }
 
 /**
