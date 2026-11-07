@@ -328,6 +328,9 @@ function _showAll(root, selector) {
 NpcStore.setType = function setType(type) {
 	const root = NpcStore.getRoot();
 
+	// Barter/cash shop hide the total; closing them with ESC/cancel skips closeStore(), so un-hide it here.
+	_showAll(root, '.total');
+
 	switch (type) {
 		case NpcStore.Type.BUY:
 		case NpcStore.Type.MARKETSHOP:
