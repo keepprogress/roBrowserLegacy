@@ -26,7 +26,7 @@ const mocks = vi.hoisted(() => ({
 	},
 	entityManager: { free: vi.fn(), forEach: vi.fn() },
 	effectManager: { free: vi.fn(), init: vi.fn(), spam: vi.fn() },
-	screenEffects: { init: vi.fn(), startMapflagEffect: vi.fn() },
+	screenEffects: { init: vi.fn(), startMapflagEffect: vi.fn(), contextRestored: vi.fn() },
 	sky: { setUpCloudData: vi.fn(), init: vi.fn(), contextRestored: vi.fn() },
 	damage: { free: vi.fn(), init: vi.fn(), contextRestored: vi.fn() },
 	spriteRenderer: { init: vi.fn(), contextRestored: vi.fn() },
@@ -403,6 +403,9 @@ describe('MapRenderer.onContextRestored', () => {
 		vi.clearAllMocks();
 		MapRenderer.loading = false;
 		MapRenderer.currentMap = 'prontera.gat';
+		MapRenderer._inGame = true;
+		MapRenderer.light = { ambient: [0.5, 0.5, 0.5], diffuse: [1, 1, 1], env: new Float32Array(3) };
+		MapRenderer.diffuse = new Float32Array([1, 1, 1]);
 		mocks.thread.send.mockImplementation(name => (name === 'LOAD_MAP' ? 21 : undefined));
 	});
 
@@ -417,6 +420,7 @@ describe('MapRenderer.onContextRestored', () => {
 		expect(mocks.spriteRenderer.contextRestored).toHaveBeenCalledOnce();
 		expect(mocks.damage.contextRestored).toHaveBeenCalledOnce();
 		expect(mocks.sky.contextRestored).toHaveBeenCalledOnce();
+		expect(mocks.screenEffects.contextRestored).toHaveBeenCalledOnce();
 		expect(mocks.entityManager.free).not.toHaveBeenCalled();
 		expect(mocks.uiManager.removeComponents).not.toHaveBeenCalled();
 		expect(mocks.bgm.stop).not.toHaveBeenCalled();
@@ -467,5 +471,43 @@ describe('MapRenderer.onContextRestored', () => {
 		load[2](true);
 
 		expect(mocks.renderer.render).not.toHaveBeenCalled();
+	});
+
+	it('keeps the scene stopped when the reload fails', () => {
+		MapRenderer.onContextRestored();
+
+		mocks.thread.send.mock.calls.find(([type]) => type === 'LOAD_MAP')[2](false);
+
+		expect(mocks.renderer.render).not.toHaveBeenCalled();
+	});
+
+	it('does nothing after the map was freed (logout, character select)', () => {
+		MapRenderer.free();
+		vi.clearAllMocks();
+
+		MapRenderer.onContextRestored();
+
+		expect(mocks.thread.send).not.toHaveBeenCalled();
+	});
+
+	it('drops a reload still pending when the map is freed', () => {
+		MapRenderer.onContextRestored();
+		const load = mocks.thread.send.mock.calls.find(([type]) => type === 'LOAD_MAP');
+
+		MapRenderer.free();
+		load[2](true);
+
+		expect(mocks.renderer.render).not.toHaveBeenCalled();
+	});
+
+	it('puts the night back after the reload resets the light to daylight', () => {
+		MapRenderer.diffuse.set([0.5, 0.5, 1]);
+
+		MapRenderer.onContextRestored();
+		MapRenderer.diffuse = new Float32Array([1, 1, 1]); // what onWorldComplete does
+		mocks.thread.send.mock.calls.find(([type]) => type === 'LOAD_MAP')[2](true);
+
+		expect(Array.from(MapRenderer.diffuse)).toEqual([0.5, 0.5, 1]);
+		expect(MapRenderer.light.env[0]).toBeCloseTo(0.75);
 	});
 });

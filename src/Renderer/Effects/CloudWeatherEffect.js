@@ -47,6 +47,16 @@ class CloudWeatherEffect {
 		this.needCleanUp = false;
 	}
 
+	/**
+	 * The WebGL context was replaced: load the cloud textures again
+	 */
+	static contextRestored() {
+		if (_instance) {
+			_instance._textures = [];
+			_instance.init(Renderer.tick);
+		}
+	}
+
 	static isActive() {
 		return _instance;
 	}

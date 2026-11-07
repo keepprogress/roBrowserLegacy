@@ -397,6 +397,15 @@ class RainWeatherEffect {
 		this.needCleanUp = false;
 	}
 
+	/**
+	 * The WebGL context was replaced: drop the textures, shader and buffer of the old one
+	 * (ensureDropFrame and friends build them again on the next frame)
+	 */
+	static contextRestored() {
+		_dropFrame = _filterFrame = _splashFrame = _puddleFrame = null;
+		_puddleProgram = _puddleBuffer = null;
+	}
+
 	static isActive() {
 		return _instance;
 	}

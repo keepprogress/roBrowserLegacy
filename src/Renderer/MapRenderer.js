@@ -122,6 +122,11 @@ class MapRenderer {
 	static _loadRequest = 0;
 
 	/**
+	 * @var {boolean} a map is loaded and not freed: only then can a restored WebGL context reload it
+	 */
+	static _inGame = false;
+
+	/**
 	 * @var {Array<function>} worker results of the map load in progress, held until the fade is over
 	 */
 	static _fadeQueue = [];
@@ -274,6 +279,7 @@ class MapRenderer {
 	 */
 	static free() {
 		const gl = Renderer.getContext();
+		this._inGame = false;
 
 		EntityManager.free();
 		EntityManager.clearLifeCache();
@@ -312,11 +318,13 @@ class MapRenderer {
 	 */
 	static onContextRestored() {
 		// shortcut: a map still loading keeps its dead objects until the next map change (F5 fixes it)
-		if (this.loading || !this.currentMap) {
+		if (this.loading || !this._inGame) {
 			return;
 		}
 
 		const gl = Renderer.getContext();
+		// onWorldComplete resets the light to daylight: keep the night the server sent
+		const diffuse = new Float32Array(this.diffuse);
 		const filename = this.currentMap.replace(/\.gat$/i, '.rsw');
 
 		Renderer.stop();
@@ -335,6 +343,7 @@ class MapRenderer {
 		EffectManager.free(gl);
 
 		// These keep their GPU data from one map to the next
+		ScreenEffectManager.contextRestored();
 		Ground.contextRestored();
 		AnimatedModels.contextRestored();
 		SpriteRenderer.contextRestored();
@@ -350,12 +359,20 @@ class MapRenderer {
 
 		const request = (this._loadRequest = Thread.send('LOAD_MAP', filename, success => {
 			// A map change started meanwhile and owns the scene now
-			if (request !== MapRenderer._loadRequest || MapRenderer.loading) {
+			if (request !== MapRenderer._loadRequest || MapRenderer.loading || !MapRenderer._inGame) {
 				return;
 			}
 
+			// shortcut: no retry, the scene stays stopped (the map objects are gone); F5 or a map change recovers
 			if (!success) {
 				console.error('[MapRenderer] could not reload the map after the WebGL context came back');
+				return;
+			}
+
+			const light = MapRenderer.light;
+			MapRenderer.diffuse.set(diffuse);
+			for (let i = 0; i < 3; ++i) {
+				light.env[i] = 1 - (1 - diffuse[i]) * (1 - light.ambient[i]);
 			}
 
 			SpriteRenderer.init(gl);
@@ -717,6 +734,7 @@ function onMapComplete(success, error) {
 	// Background.remove keeps the image over the game and its windows until
 	// the screen is black, so what the player sees is unchanged.
 	MapRenderer.loading = false;
+	MapRenderer._inGame = true;
 	_revealing = true;
 
 	MapRenderer.onLoad();
