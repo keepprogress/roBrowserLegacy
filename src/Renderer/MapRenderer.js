@@ -41,6 +41,7 @@ import GraphicsSettings from 'Preferences/Graphics.js';
 import MapPreferences from 'Preferences/Map.js';
 import glMatrix from 'Utils/gl-matrix.js';
 import PACKETVER from 'Network/PacketVerManager.js';
+import EffectConst from 'DB/Effects/EffectConst.js';
 import JoystickUI from 'UI/Components/JoystickUI/JoystickUI.js';
 
 import PostProcess from 'Renderer/Effects/PostProcess.js';
@@ -66,6 +67,7 @@ const _pos = new Uint16Array(2);
  */
 let _revealing = false;
 let _nextMap = null;
+let _restoreHooked = false;
 
 /**
  * @param {string} mapname
@@ -300,6 +302,82 @@ class MapRenderer {
 		this.water = null;
 		this.sounds = null;
 		this.effects = null;
+	}
+
+	/**
+	 * The browser gave back a new WebGL context (after the GPU process crashed or was
+	 * reset): the map's buffers, textures and programs died with the old one. Load the
+	 * map's GPU data again, keeping the entities, windows and session: the server will not
+	 * send the actors again. Renderer.onContextRestored has already rebuilt its own parts.
+	 */
+	static onContextRestored() {
+		// shortcut: a map still loading keeps its dead objects until the next map change (F5 fixes it)
+		if (this.loading || !this.currentMap) {
+			return;
+		}
+
+		const gl = Renderer.getContext();
+		const filename = this.currentMap.replace(/\.gat$/i, '.rsw');
+
+		Renderer.stop();
+
+		// What free() releases, minus the entities, sounds and music
+		// shortcut: GR2 3D models stay attached to their entities, so they stay blank until the next map
+		GridSelector.free(gl);
+		Sounds.free();
+		Effects.free();
+		Ground.free(gl);
+		Water.free(gl);
+		Models.free(gl);
+		AnimatedModels.free(gl);
+		OccluderFade.free(gl);
+		Damage.free(gl);
+		EffectManager.free(gl);
+
+		// These keep their GPU data from one map to the next
+		Ground.contextRestored();
+		AnimatedModels.contextRestored();
+		SpriteRenderer.contextRestored();
+		Damage.contextRestored();
+		Sky.contextRestored();
+
+		Thread.hook('MAP_PROGRESS', () => {});
+		Thread.hook('MAP_WORLD', loadEvent(onWorldComplete));
+		Thread.hook('MAP_GROUND', loadEvent(onGroundComplete));
+		Thread.hook('MAP_ALTITUDE', loadEvent(onAltitudeComplete));
+		Thread.hook('MAP_MODELS', loadEvent(onModelsComplete));
+		Thread.hook('MAP_ANIMATED_MODEL', loadEvent(onAnimatedModelComplete));
+
+		const request = (this._loadRequest = Thread.send('LOAD_MAP', filename, success => {
+			// A map change started meanwhile and owns the scene now
+			if (request !== MapRenderer._loadRequest || MapRenderer.loading) {
+				return;
+			}
+
+			if (!success) {
+				console.error('[MapRenderer] could not reload the map after the WebGL context came back');
+			}
+
+			SpriteRenderer.init(gl);
+			Sky.init(gl, filename);
+			Damage.init(gl);
+			EffectManager.init(gl);
+			Sky.setUpCloudData();
+
+			// A warp gets its effect once, when it appears (MapEngine/Entity.js onEntitySpam): give it back.
+			// shortcut: other lasting effects (ground skills, auras) stay gone until they are sent again
+			EntityManager.forEach(entity => {
+				if (entity.objecttype === entity.constructor.TYPE_WARP) {
+					EffectManager.spam({
+						ownerAID: entity.GID,
+						position: entity.position,
+						effectId: PACKETVER.value < 20030715 ? EffectConst.EF_WARPZONE : EffectConst.EF_WARPZONE2
+					});
+				}
+			});
+
+			Renderer.render(MapRenderer.onRender);
+		}));
 	}
 
 	/**
@@ -618,6 +696,12 @@ function onMapComplete(success, error) {
 	// Initialize renderers
 	Renderer.init();
 	const gl = Renderer.getContext();
+
+	// After Renderer.init, so that the Renderer rebuilds its own parts first
+	if (!_restoreHooked) {
+		_restoreHooked = true;
+		Renderer.canvas.addEventListener('webglcontextrestored', () => MapRenderer.onContextRestored(), false);
+	}
 
 	SpriteRenderer.init(gl);
 	Sky.init(gl, worldResource);

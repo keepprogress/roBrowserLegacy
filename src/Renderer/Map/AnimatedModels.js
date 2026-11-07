@@ -935,9 +935,17 @@ function hasAnimatedModels() {
 /**
  * Export
  */
+/**
+ * The WebGL context was lost and came back: the program died with it
+ */
+function contextRestored() {
+	_program = null;
+}
+
 export default {
 	init: init,
 	free: free,
+	contextRestored: contextRestored,
 	add: add,
 	render: render,
 	renderFaded: renderFaded,

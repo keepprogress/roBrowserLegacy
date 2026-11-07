@@ -499,6 +499,14 @@ class Damage {
 	 *
 	 * @param {object} gl context
 	 */
+	/**
+	 * The WebGL context was lost and came back: the skin textures died with it
+	 */
+	static contextRestored() {
+		_list.length = 0;
+		Object.keys(_loadedSkinsData).forEach(key => delete _loadedSkinsData[key]);
+	}
+
 	static free(gl) {
 		_list.forEach(item => {
 			if (item.isDisposable) {

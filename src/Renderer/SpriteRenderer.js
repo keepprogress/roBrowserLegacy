@@ -655,6 +655,14 @@ class SpriteRenderer {
 	 *
 	 * @param {object} gl context
 	 */
+	/**
+	 * The WebGL context was lost and came back: the buffer and program died with it
+	 */
+	static contextRestored() {
+		_buffer = null;
+		_program = null;
+	}
+
 	static init(gl) {
 		if (!_buffer) {
 			_buffer = gl.createBuffer();
