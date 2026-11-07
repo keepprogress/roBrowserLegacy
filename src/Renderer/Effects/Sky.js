@@ -94,6 +94,13 @@ function loadCloudTexture(gl, i) {
 }
 
 /**
+ * The WebGL context was lost and came back: the cloud textures died with it
+ */
+function contextRestored() {
+	_textures.length = 0;
+}
+
+/**
  * Set up cloud data
  */
 function setUpCloudData() {
@@ -217,6 +224,7 @@ function render(gl, modelView, projection, fog, tick) {
  */
 export default {
 	init: init,
+	contextRestored: contextRestored,
 	setUpCloudData: setUpCloudData,
 	render: render
 };

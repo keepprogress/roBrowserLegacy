@@ -41,6 +41,7 @@ import GraphicsSettings from 'Preferences/Graphics.js';
 import MapPreferences from 'Preferences/Map.js';
 import glMatrix from 'Utils/gl-matrix.js';
 import PACKETVER from 'Network/PacketVerManager.js';
+import EffectConst from 'DB/Effects/EffectConst.js';
 import JoystickUI from 'UI/Components/JoystickUI/JoystickUI.js';
 
 import PostProcess from 'Renderer/Effects/PostProcess.js';
@@ -66,6 +67,7 @@ const _pos = new Uint16Array(2);
  */
 let _revealing = false;
 let _nextMap = null;
+let _restoreHooked = false;
 
 /**
  * @param {string} mapname
@@ -118,6 +120,11 @@ class MapRenderer {
 	 * @var {number} worker request of the map load in progress, 0 when none
 	 */
 	static _loadRequest = 0;
+
+	/**
+	 * @var {boolean} a map is loaded and not freed: only then can a restored WebGL context reload it
+	 */
+	static _inGame = false;
 
 	/**
 	 * @var {Array<function>} worker results of the map load in progress, held until the fade is over
@@ -272,6 +279,7 @@ class MapRenderer {
 	 */
 	static free() {
 		const gl = Renderer.getContext();
+		this._inGame = false;
 
 		EntityManager.free();
 		EntityManager.clearLifeCache();
@@ -300,6 +308,95 @@ class MapRenderer {
 		this.water = null;
 		this.sounds = null;
 		this.effects = null;
+	}
+
+	/**
+	 * The browser gave back a new WebGL context (after the GPU process crashed or was
+	 * reset): the map's buffers, textures and programs died with the old one. Load the
+	 * map's GPU data again, keeping the entities, windows and session: the server will not
+	 * send the actors again. Renderer.onContextRestored has already rebuilt its own parts.
+	 */
+	static onContextRestored() {
+		// shortcut: a map still loading keeps its dead objects until the next map change (F5 fixes it)
+		if (this.loading) {
+			return;
+		}
+
+		// No map (login, character select): nothing to reload, but the modules must not keep
+		// their dead programs for the next map (Ground.init keeps a program it already has)
+		if (!this._inGame) {
+			forgetDeadGpuObjects();
+			return;
+		}
+
+		const gl = Renderer.getContext();
+		// onWorldComplete resets the light to daylight: keep the night the server sent
+		const diffuse = new Float32Array(this.diffuse);
+		const filename = this.currentMap.replace(/\.gat$/i, '.rsw');
+
+		Renderer.stop();
+
+		// What free() releases, minus the entities, sounds and music
+		// shortcut: GR2 3D models stay attached to their entities, so they stay blank until the next map
+		GridSelector.free(gl);
+		Sounds.free();
+		Effects.free();
+		Ground.free(gl);
+		Water.free(gl);
+		Models.free(gl);
+		AnimatedModels.free(gl);
+		OccluderFade.free(gl);
+		Damage.free(gl);
+		EffectManager.free(gl);
+
+		// These keep their GPU data from one map to the next
+		forgetDeadGpuObjects();
+
+		Thread.hook('MAP_PROGRESS', () => {});
+		Thread.hook('MAP_WORLD', loadEvent(onWorldComplete));
+		Thread.hook('MAP_GROUND', loadEvent(onGroundComplete));
+		Thread.hook('MAP_ALTITUDE', loadEvent(onAltitudeComplete));
+		Thread.hook('MAP_MODELS', loadEvent(onModelsComplete));
+		Thread.hook('MAP_ANIMATED_MODEL', loadEvent(onAnimatedModelComplete));
+
+		const request = (this._loadRequest = Thread.send('LOAD_MAP', filename, success => {
+			// A map change started meanwhile and owns the scene now
+			if (request !== MapRenderer._loadRequest || MapRenderer.loading || !MapRenderer._inGame) {
+				return;
+			}
+
+			// shortcut: no retry, the scene stays stopped (the map objects are gone); F5 or a map change recovers
+			if (!success) {
+				console.error('[MapRenderer] could not reload the map after the WebGL context came back');
+				return;
+			}
+
+			const light = MapRenderer.light;
+			MapRenderer.diffuse.set(diffuse);
+			for (let i = 0; i < 3; ++i) {
+				light.env[i] = 1 - (1 - diffuse[i]) * (1 - light.ambient[i]);
+			}
+
+			SpriteRenderer.init(gl);
+			Sky.init(gl, filename);
+			Damage.init(gl);
+			EffectManager.init(gl);
+			Sky.setUpCloudData();
+
+			// A warp gets its effect once, when it appears (MapEngine/Entity.js onEntitySpam): give it back.
+			// shortcut: other lasting effects (ground skills, auras) stay gone until they are sent again
+			EntityManager.forEach(entity => {
+				if (entity.objecttype === entity.constructor.TYPE_WARP) {
+					EffectManager.spam({
+						ownerAID: entity.GID,
+						position: entity.position,
+						effectId: PACKETVER.value < 20030715 ? EffectConst.EF_WARPZONE : EffectConst.EF_WARPZONE2
+					});
+				}
+			});
+
+			Renderer.render(MapRenderer.onRender);
+		}));
 	}
 
 	/**
@@ -590,6 +687,18 @@ function registerPostProcessModules(gl) {
 }
 
 /**
+ * Modules that keep GPU objects from one map to the next: drop the ones of the lost context
+ */
+function forgetDeadGpuObjects() {
+	ScreenEffectManager.contextRestored();
+	Ground.contextRestored();
+	AnimatedModels.contextRestored();
+	SpriteRenderer.contextRestored();
+	Damage.contextRestored();
+	Sky.contextRestored();
+}
+
+/**
  * Once the map finished to load
  */
 function onMapComplete(success, error) {
@@ -619,6 +728,12 @@ function onMapComplete(success, error) {
 	Renderer.init();
 	const gl = Renderer.getContext();
 
+	// After Renderer.init, so that the Renderer rebuilds its own parts first
+	if (!_restoreHooked) {
+		_restoreHooked = true;
+		Renderer.canvas.addEventListener('webglcontextrestored', () => MapRenderer.onContextRestored(), false);
+	}
+
 	SpriteRenderer.init(gl);
 	Sky.init(gl, worldResource);
 	Damage.init(gl);
@@ -633,6 +748,7 @@ function onMapComplete(success, error) {
 	// Background.remove keeps the image over the game and its windows until
 	// the screen is black, so what the player sees is unchanged.
 	MapRenderer.loading = false;
+	MapRenderer._inGame = true;
 	_revealing = true;
 
 	MapRenderer.onLoad();

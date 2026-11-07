@@ -16,6 +16,7 @@ const mocks = vi.hoisted(() => ({
 	},
 	mouse: { intersect: true },
 	renderer: {
+		canvas: { addEventListener: vi.fn() },
 		stop: vi.fn(),
 		remove: vi.fn(),
 		getContext: vi.fn(() => ({})),
@@ -23,11 +24,18 @@ const mocks = vi.hoisted(() => ({
 		init: vi.fn(),
 		show: vi.fn()
 	},
-	entityManager: { free: vi.fn() },
-	effectManager: { free: vi.fn(), init: vi.fn() },
-	screenEffects: { init: vi.fn(), startMapflagEffect: vi.fn() },
-	sky: { setUpCloudData: vi.fn(), init: vi.fn() },
-	damage: { free: vi.fn(), init: vi.fn() },
+	entityManager: { free: vi.fn(), forEach: vi.fn() },
+	effectManager: { free: vi.fn(), init: vi.fn(), spam: vi.fn() },
+	screenEffects: { init: vi.fn(), startMapflagEffect: vi.fn(), contextRestored: vi.fn() },
+	sky: { setUpCloudData: vi.fn(), init: vi.fn(), contextRestored: vi.fn() },
+	damage: { free: vi.fn(), init: vi.fn(), contextRestored: vi.fn() },
+	spriteRenderer: { init: vi.fn(), contextRestored: vi.fn() },
+	mapParts: Object.fromEntries(
+		['GridSelector', 'Ground', 'Water', 'Models', 'AnimatedModels', 'OccluderFade', 'Sounds', 'Effects'].map(name => [
+			name,
+			{ free: vi.fn(), contextRestored: vi.fn() }
+		])
+	),
 	joystickUI: { onRestore: vi.fn() },
 	perfProbe: { enabled: false, mapStart: vi.fn(), mapReady: vi.fn() }
 }));
@@ -45,17 +53,17 @@ vi.mock('Controls/MouseEventHandler.js', () => ({ default: mocks.mouse }));
 vi.mock('Renderer/Renderer.js', () => ({ default: mocks.renderer }));
 vi.mock('Renderer/Camera.js', () => ({ default: {} }));
 vi.mock('Renderer/EntityManager.js', () => ({ default: mocks.entityManager }));
-vi.mock('Renderer/Map/GridSelector.js', () => ({ default: {} }));
-vi.mock('Renderer/Map/Ground.js', () => ({ default: {} }));
+vi.mock('Renderer/Map/GridSelector.js', () => ({ default: mocks.mapParts.GridSelector }));
+vi.mock('Renderer/Map/Ground.js', () => ({ default: mocks.mapParts.Ground }));
 vi.mock('Renderer/Map/Altitude.js', () => ({ default: {} }));
-vi.mock('Renderer/Map/Water.js', () => ({ default: {} }));
-vi.mock('Renderer/Map/Models.js', () => ({ default: {} }));
-vi.mock('Renderer/Map/AnimatedModels.js', () => ({ default: {} }));
-vi.mock('Renderer/Map/OccluderFade.js', () => ({ default: {} }));
+vi.mock('Renderer/Map/Water.js', () => ({ default: mocks.mapParts.Water }));
+vi.mock('Renderer/Map/Models.js', () => ({ default: mocks.mapParts.Models }));
+vi.mock('Renderer/Map/AnimatedModels.js', () => ({ default: mocks.mapParts.AnimatedModels }));
+vi.mock('Renderer/Map/OccluderFade.js', () => ({ default: mocks.mapParts.OccluderFade }));
 vi.mock('Renderer/GR2/GR2ModelRenderer.js', () => ({ default: {} }));
-vi.mock('Renderer/Map/Sounds.js', () => ({ default: {} }));
-vi.mock('Renderer/Map/Effects.js', () => ({ default: {} }));
-vi.mock('Renderer/SpriteRenderer.js', () => ({ default: { init: vi.fn() } }));
+vi.mock('Renderer/Map/Sounds.js', () => ({ default: mocks.mapParts.Sounds }));
+vi.mock('Renderer/Map/Effects.js', () => ({ default: mocks.mapParts.Effects }));
+vi.mock('Renderer/SpriteRenderer.js', () => ({ default: mocks.spriteRenderer }));
 vi.mock('Renderer/EffectManager.js', () => ({ default: mocks.effectManager }));
 vi.mock('Renderer/SignboardManager.js', () => ({ default: {} }));
 vi.mock('Renderer/ScreenEffectManager.js', () => ({ default: mocks.screenEffects }));
@@ -64,7 +72,7 @@ vi.mock('Renderer/Effects/Damage.js', () => ({ default: mocks.damage }));
 vi.mock('Preferences/Graphics.js', () => ({ default: {} }));
 vi.mock('Preferences/Map.js', () => ({ default: { useFog: true } }));
 vi.mock('Utils/gl-matrix.js', () => ({ default: { mat4: {} } }));
-vi.mock('Network/PacketVerManager.js', () => ({ default: {} }));
+vi.mock('Network/PacketVerManager.js', () => ({ default: { value: 20240417 } }));
 vi.mock('UI/Components/JoystickUI/JoystickUI.js', () => ({ default: mocks.joystickUI }));
 vi.mock('Renderer/Effects/PostProcess.js', () => ({ default: { register: () => {} } }));
 vi.mock('Renderer/Effects/Shaders/Bloom.js', () => ({ default: {} }));
@@ -387,5 +395,123 @@ describe('MapRenderer.free', () => {
 		MapRenderer.free();
 
 		expect(mocks.cursor.setType).toHaveBeenCalledWith(mocks.cursor.ACTION.DEFAULT);
+	});
+});
+
+describe('MapRenderer.onContextRestored', () => {
+	beforeEach(() => {
+		vi.clearAllMocks();
+		MapRenderer.loading = false;
+		MapRenderer.currentMap = 'prontera.gat';
+		MapRenderer._inGame = true;
+		MapRenderer.light = { ambient: [0.5, 0.5, 0.5], diffuse: [1, 1, 1], env: new Float32Array(3) };
+		MapRenderer.diffuse = new Float32Array([1, 1, 1]);
+		mocks.thread.send.mockImplementation(name => (name === 'LOAD_MAP' ? 21 : undefined));
+	});
+
+	it('loads the map GPU data again and keeps the entities, windows and music', () => {
+		MapRenderer.onContextRestored();
+
+		expect(mocks.renderer.stop).toHaveBeenCalledOnce();
+		Object.values(mocks.mapParts).forEach(part => expect(part.free).toHaveBeenCalledOnce());
+		expect(mocks.effectManager.free).toHaveBeenCalledOnce();
+		expect(mocks.mapParts.Ground.contextRestored).toHaveBeenCalledOnce();
+		expect(mocks.mapParts.AnimatedModels.contextRestored).toHaveBeenCalledOnce();
+		expect(mocks.spriteRenderer.contextRestored).toHaveBeenCalledOnce();
+		expect(mocks.damage.contextRestored).toHaveBeenCalledOnce();
+		expect(mocks.sky.contextRestored).toHaveBeenCalledOnce();
+		expect(mocks.screenEffects.contextRestored).toHaveBeenCalledOnce();
+		expect(mocks.entityManager.free).not.toHaveBeenCalled();
+		expect(mocks.uiManager.removeComponents).not.toHaveBeenCalled();
+		expect(mocks.bgm.stop).not.toHaveBeenCalled();
+		expect(mocks.background.setLoading).not.toHaveBeenCalled();
+
+		const load = mocks.thread.send.mock.calls.find(([type]) => type === 'LOAD_MAP');
+		expect(load[1]).toBe('prontera.rsw');
+		expect(mocks.renderer.render).not.toHaveBeenCalled();
+
+		load[2](true);
+
+		expect(mocks.spriteRenderer.init).toHaveBeenCalledOnce();
+		expect(mocks.sky.init).toHaveBeenCalledWith(expect.anything(), 'prontera.rsw');
+		expect(mocks.damage.init).toHaveBeenCalledOnce();
+		expect(mocks.effectManager.init).toHaveBeenCalledOnce();
+		expect(mocks.renderer.render).toHaveBeenCalledWith(MapRenderer.onRender);
+	});
+
+	it('gives the warps their effect back, as they only get it when they appear', () => {
+		class Entity {
+			static TYPE_WARP = -1;
+		}
+		const warp = Object.assign(new Entity(), { objecttype: -1, GID: 9, position: [1, 2, 0] });
+		const npc = Object.assign(new Entity(), { objecttype: 6, GID: 10, position: [3, 4, 0] });
+		mocks.entityManager.forEach.mockImplementation(callback => [warp, npc].forEach(callback));
+
+		MapRenderer.onContextRestored();
+		mocks.thread.send.mock.calls.find(([type]) => type === 'LOAD_MAP')[2](true);
+
+		expect(mocks.effectManager.spam).toHaveBeenCalledOnce();
+		expect(mocks.effectManager.spam).toHaveBeenCalledWith(expect.objectContaining({ ownerAID: 9, position: warp.position }));
+	});
+
+	it('leaves a map that is still loading alone', () => {
+		MapRenderer.loading = true;
+
+		MapRenderer.onContextRestored();
+
+		expect(mocks.renderer.stop).not.toHaveBeenCalled();
+		expect(mocks.thread.send).not.toHaveBeenCalled();
+	});
+
+	it('drops the reload once a map change has taken over', () => {
+		MapRenderer.onContextRestored();
+		const load = mocks.thread.send.mock.calls.find(([type]) => type === 'LOAD_MAP');
+
+		MapRenderer._loadRequest = 22; // the map change's own request
+		load[2](true);
+
+		expect(mocks.renderer.render).not.toHaveBeenCalled();
+	});
+
+	it('keeps the scene stopped when the reload fails', () => {
+		MapRenderer.onContextRestored();
+
+		mocks.thread.send.mock.calls.find(([type]) => type === 'LOAD_MAP')[2](false);
+
+		expect(mocks.renderer.render).not.toHaveBeenCalled();
+	});
+
+	it('does not reload after the map was freed (logout, character select), but forgets the dead GPU objects', () => {
+		MapRenderer.free();
+		vi.clearAllMocks();
+
+		MapRenderer.onContextRestored();
+
+		expect(mocks.thread.send).not.toHaveBeenCalled();
+		expect(mocks.renderer.stop).not.toHaveBeenCalled();
+		expect(mocks.mapParts.Ground.contextRestored).toHaveBeenCalledOnce();
+		expect(mocks.spriteRenderer.contextRestored).toHaveBeenCalledOnce();
+		expect(mocks.screenEffects.contextRestored).toHaveBeenCalledOnce();
+	});
+
+	it('drops a reload still pending when the map is freed', () => {
+		MapRenderer.onContextRestored();
+		const load = mocks.thread.send.mock.calls.find(([type]) => type === 'LOAD_MAP');
+
+		MapRenderer.free();
+		load[2](true);
+
+		expect(mocks.renderer.render).not.toHaveBeenCalled();
+	});
+
+	it('puts the night back after the reload resets the light to daylight', () => {
+		MapRenderer.diffuse.set([0.5, 0.5, 1]);
+
+		MapRenderer.onContextRestored();
+		MapRenderer.diffuse = new Float32Array([1, 1, 1]); // what onWorldComplete does
+		mocks.thread.send.mock.calls.find(([type]) => type === 'LOAD_MAP')[2](true);
+
+		expect(Array.from(MapRenderer.diffuse)).toEqual([0.5, 0.5, 1]);
+		expect(MapRenderer.light.env[0]).toBeCloseTo(0.75);
 	});
 });

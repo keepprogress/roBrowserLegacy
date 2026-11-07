@@ -187,6 +187,14 @@ class ScreenEffectManager {
 		}
 	}
 
+	/**
+	 * The WebGL context was replaced: weather keeps its GPU objects between frames
+	 */
+	static contextRestored() {
+		RainWeather.contextRestored();
+		CloudWeatherEffect.contextRestored();
+	}
+
 	static clean() {
 		Poison.setActive(false);
 		Blind.setActive(false);
